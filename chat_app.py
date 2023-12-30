@@ -9,7 +9,7 @@ import random
 import time
 import streamlit as st
 
-from chat_bot import PizzaChatBot
+from chat_bot import F1ChatBot
 from util import local_settings
 from prompt_list import prompts
 
@@ -32,7 +32,7 @@ def initialize() -> None:
     st.sidebar.title("🤖 🍕")
 
     if "chatbot" not in st.session_state:
-        st.session_state.chatbot = PizzaChatBot(st.session_state.system_behavior)
+        st.session_state.chatbot = F1ChatBot(st.session_state.system_behavior)
 
     with st.sidebar:
         st.markdown(

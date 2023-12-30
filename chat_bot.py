@@ -51,7 +51,7 @@ class GPT_Helper:
 # [i] PizzaChatBot                                                                               #
 # [i]                                                                                            #
 
-class PizzaChatBot:
+class F1ChatBot:
     """
     Generate a response by using LLMs.
     """
