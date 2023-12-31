@@ -6,4 +6,5 @@ st.set_page_config(
 )
 
 st.title("Main Page")
+st.text("adding some text")
 st.sidebar.success("Select one of the below pages")
