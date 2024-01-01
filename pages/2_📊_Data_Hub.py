@@ -23,5 +23,5 @@ st.sidebar.subheader("testing some tests")
 
 
 #Importing the datasets from our github repo
-# drivers_data = pd.read_csv('data/drivers.csv')
-# drivers_data
+drivers_data = pd.read_csv('https://raw.githubusercontent.com/ARCadete21/Capstone-Project/main/data/drivers.csv')
+drivers_data
