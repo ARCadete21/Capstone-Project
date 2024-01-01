@@ -44,6 +44,6 @@ _ = load_dotenv(find_dotenv())
 if not _:
     _ = load_dotenv(".env")
 
-print(os.getenv("OPENAI_API_KEY")[0:-15])
+print(os.getenv("OPENAI_API_KEY")[0:-24])
 
 local_settings = Settings()
