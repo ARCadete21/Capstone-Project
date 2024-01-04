@@ -3,9 +3,15 @@ import streamlit as st
 import pandas as pd
 
 #Used to create some of the plots
-import plost as pls
-#import matplotlib.pyplot as plt
 import plotly.express as px
+
+#import plost as pls
+#import matplotlib.pyplot as plt
+
+
+#Maybe to use option menus
+from streamlit_option_menu import option_menu
+
 
 ######## Setting the overall page configuration ########
 st.set_page_config(
@@ -19,56 +25,160 @@ st.set_page_config(
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-#### Importing the datasets from our github repo that will be used to create the visualizations
-new_era = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Project/cadete/data2022_2023.csv")
+#### Importing the datasets from our github repo that will be used to create the visualizations ###
+#Data that was used for the modelling
+new_era = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Project/cadete/data2022_2023.csv") #for general use
 
+#Data for drivers info tab
+drivers_data = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Project/main/data/drivers.csv")
+constructors_data = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Project/main/data/constructors.csv")
+# Merge datasets based on 'driverRef'
+merged_drivers = pd.merge(new_era, drivers_data[['driverRef', 'forename', 'surname']], on='driverRef', how='left')
+merged_drivers = pd.merge(merged_drivers, constructors_data[['constructorRef', 'name']], on='constructorRef', how='left')
 
-#### Subsetting the samples for different utilities 
-# Creating a new DataFrame containing only Driver Names
-driver_names = new_era[['driverRef']].drop_duplicates().copy()
+# Create a new column 'driver_name' by concatenating 'Forename' and 'Surname'
+merged_drivers['driver_name'] = merged_drivers['forename'] + ' ' + merged_drivers['surname']
 
+# year int
+merged_drivers['year'] = merged_drivers['year'].astype('Int32')
 
-# Capitalize the first letter of all other names
-driver_names['driverRef'] = driver_names['driverRef'].str.capitalize()
-
-
-# Mapping of specific names to be replaced
-name_mapping = {'Max_verstappen': 'Verstappen',
-                'Kevin_magnussen': 'Magnussen',
-                'Mick_schumacher': 'Schumacher',
-                'De_vries': 'De Vries'}
-
-# Replace values in the 'driver_names' column using the mapping
-driver_names['driverRef'] = driver_names['driverRef'].replace(name_mapping)
-
-# to reset the index of the new DataFrame
-driver_names.reset_index(drop=True, inplace=True)
-driver_names.sort_values(by='driverRef', inplace=True)
-
-######################
-# Creating a new DataFrame containing only Team Names
-team_names = new_era[['constructorRef']].drop_duplicates().copy()
-
-# Capitalize the first letter of all other names
-team_names['constructorRef'] = team_names['constructorRef'].str.capitalize()
-
-# Mapping of specific names to be replaced
-team_mapping = {'Aston_martin': 'Aston Martin',
-                'Red_bull': 'Red Bull',
-                'Alphatauri': 'Alpha Tauri',
-                'Alfa': 'Alfa Romeo'}
-
-# Replace values in the 'driver_names' column using the mapping
-team_names['constructorRef'] = team_names['constructorRef'].replace(team_mapping)
-
-# to reset the index of the new DataFrame
-team_names.reset_index(drop=True, inplace=True)
-team_names.sort_values(by='constructorRef', inplace=True)
-
-######################
+driver_nations = {'American' : '🇺🇸', 'British': '🇬🇧', 'Thai': '🇹🇭',
+                  'Australian': '🇦🇺', 'Japanese': '🇯🇵', 'Canadian': '🇨🇦',
+                  'Spanish': '🇪🇸', 'Dutch': '🇳🇱', 'German': '🇩🇪',
+                  'Monegasque': '🇲🇨', 'French': '🇫🇷' , 'Finnish': '🇫🇮',
+                  'Chinese': '🇨🇳', 'Mexican': '🇲🇽', 'Danish': '🇩🇰'
+}
 
 
 
+#Data for drivers when driver is none
+none_driver = merged_drivers[['grid', 'positionOrder', 'driverRef', 'driver_name', 
+                             'milliseconds_x', 'nationality_x', 'status',
+                             'circuitRef', 'year']]
+
+
+# Sample mapping of constructorRef values to image paths
+# constructor_logos = {
+#     'Mercedes': 'https://yt3.googleusercontent.com/GAn-iyc9QWZT_RsxaGRuX7deb8AP2dJRo9N8XOjYeciqQMC6AP00zNTXQXqiApHN3QtmsAYK=s900-c-k-c0x00ffffff-no-rj',
+#     'Red Bull': 'https://liquipedia.net/commons/images/d/d8/Red_Bull_Racing_allmode.png',
+#     'McLaren': 'https://logowik.com/content/uploads/images/mclaren-formula-1-team8249.logowik.com.webp',
+#     'Aston Martin': 'https://logowik.com/content/uploads/images/aston-martin-cognizant-formula-one-team6133.jpg',
+#     'AlphaTauri': 'https://upload.wikimedia.org/wikipedia/en/thumb/0/09/Scuderia_Alpha-Tauri.svg/1200px-Scuderia_Alpha-Tauri.svg.png',
+#     'Haas F1 Team': 'https://branditechture.agency/brand-logos/wp-content/uploads/wpdm-cache/Haas-F1-Team-900x0.png',
+#     'Alpine F1 team': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Alpine_F1_Team_Logo.svg/2233px-Alpine_F1_Team_Logo.svg.png',
+#     'Williams': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Logo_Williams_F1.png/1280px-Logo_Williams_F1.png',
+#     'Ferrari': 'https://w7.pngwing.com/pngs/733/606/png-transparent-scuderia-ferrari-laferrari-car-formula-1-ferrari-logo-signage-ferrari-thumbnail.png',
+#     'Alfa Romeo': 'https://media.formula1.com/image/upload/content/dam/fom-website/manual/teams/Sauber/Alfa_Romeo_Racing_logo.jpg'
+# }
+
+
+
+#Main Sidebar selectbox
+st.sidebar.subheader("What are you looking for?")
+
+select_opts = ['Driver Information', 
+               'Constructor Statistics', 
+               'Grand Prix Information',
+               'Historical Data']
+# Driver statistics, Constructor Statistics, Grand Prix information, etc.
+option_chosen = st.sidebar.selectbox('Select your option', [None] + select_opts)
+
+
+
+if option_chosen == 'Driver Information':
+    selected_driver = st.selectbox("Select a driver:", [None] + merged_drivers['driver_name'].sort_values().unique().tolist(), 
+                                   index=0, key="driver_selectbox")
+    
+    # Sidebar specifics
+    selected_year = st.sidebar.selectbox('Select Year', merged_drivers['year'].unique())
+
+    # Add your driver statistics content here
+    if selected_driver is None:
+        # Driver Standings
+        
+
+        ###### Row A of data displaying#######
+        # Initializing columns to display data
+        col1, col2= st.columns(2)
+
+        # Add a new column 'positions_gained' representing positions gained per race
+        none_driver['positions_gained'] = none_driver['grid'] - none_driver['positionOrder']
+
+        # Filter data for the selected year
+        selected_year_data = none_driver[none_driver['year'] == selected_year]
+
+        # Display the top 5 gainers in the selected year using st.metric
+        top_gainers = selected_year_data.groupby('driver_name')['positions_gained'].mean().nlargest(5).round(1)
+        col1.write(f"Top 5 Position Gainers in {selected_year}:")
+        for driver, positions_gained in top_gainers.items():
+            col1.metric(label=driver, value=positions_gained)
+
+        # Display top 5 losers using st.metric
+        top_losers = selected_year_data.groupby('driver_name')['positions_gained'].mean().nsmallest(5).round(1)
+        col2.write(f"Top 5 Position Losers in {selected_year}:")
+        for driver, positions_lost in top_losers.items():
+            col2.metric(label=driver, value=positions_lost)
+
+        ###### Row B ######
+        #Drivers with most wins
+        winner_counts = selected_year_data[selected_year_data['positionOrder'] == 1].groupby('driver_name').size()
+
+        gp_winners = winner_counts.nlargest(5)
+
+        # Create a horizontal bar chart using plotly express
+        fig = px.bar(gp_winners, x=gp_winners.values, 
+                     y=gp_winners.index, 
+                     orientation='h', 
+                     title=f"Top 5 Drivers with more Wins in {selected_year}")
+
+        # Display the chart using st.plotly_chart
+        col1.plotly_chart(fig)
+
+
+        # Drivers with most top 3
+        # Count the occurrences of each driver in the top 3 positions
+        top3_counts = selected_year_data[selected_year_data['positionOrder'] <= 3].groupby('driver_name').size()
+
+        top3_drivers = top3_counts.nlargest(5)
+
+        # Create a horizontal bar chart using plotly express
+        fig = px.bar(top3_drivers, x=top3_drivers.values, 
+                     y=top3_drivers.index, 
+                     orientation='h', 
+                     title=f"Top 5 Drivers with more Podiums in {selected_year}")
+
+        # Display the chart using st.plotly_chart
+        col2.plotly_chart(fig)
+
+
+        
+        
+        #Drivers with most DNFs
+        
+        #Boxplot with miliseconds variation (to display consistency)
+        #Line Chart comparing finishing position
+        #Histogram with nationalities
+        #Inserir general graficos
+        st.text('narah yet')
+
+
+    else:
+        #Row A
+        #Initializing the columns
+        col1, col2, col3 = st.columns(3)
+
+        # Column 1
+        # Assuming selected_driver is the variable containing the selected driver's name
+        selected_driver_nationality = merged_drivers.loc[merged_drivers['driver_name'] == selected_driver, 'nationality_x'].iloc[0]
+        selected_driver_emoji = driver_nations.get(selected_driver_nationality, '')
+        col1.metric("Driver Nationality", f"{selected_driver_nationality} \n {selected_driver_emoji}")
+
+        selected_driver_age = merged_drivers.loc[merged_drivers['driver_name'] == selected_driver, 'age'].iloc[0]
+        col1.metric(f"{selected_driver}'s Age", selected_driver_age)
+
+        #Column 2
+        selected_driver_team = merged_drivers.loc[merged_drivers['driver_name'] == selected_driver, 'name'].iloc[0]
+        col2.metric(f"{selected_driver} drives for", selected_driver_team)
 
 
 
@@ -76,105 +186,22 @@ team_names.sort_values(by='constructorRef', inplace=True)
 
 
 
-######## Main content of the page ########
-#Page introduction
-st.title("Data Hub")
-st.text("In this page you will be able to find all things data related about the ongoing F1 Season!")
-st.text("To the left you will find the sliders to filter for your favorite drivers and your favorite teams")
-st.text("(or for anything you'd like really 😊)")
 
-######## Row A #######
-#Column 1
-st.markdown('### Interesting facts')
-col1, col2, col3 = st.columns(3)
-#Subsetting a dataset containing only 1 row per driver
-new_era_unique = new_era.drop_duplicates(subset='driverRef')
-#Calculate the average age of the drivers
-average_age = new_era_unique['age'].mean()
-#Creating the first info box
-col1.metric("Average Age on The Grid", average_age)
+elif option_chosen == 'Constructor Statistics':
+    selected_constructor = st.selectbox("Select a Constructor:", merged_drivers['name'].sort_values().unique().tolist(), 
+                                   index=0, key="constructor_selectbox")
 
+    st.sidebar.write("Constructor statistics content goes here")#Sidebar specifics
+    st.sidebar.selectbox('Select Year', merged_drivers['year'].unique())
+    st.sidebar.write(f"Driver selected: {selected_constructor}")# Add your constructor statistics content here
 
-# #Column 2
-# #Create a DataFrame with counts
-# count_df = new_era_unique['nationality_y'].value_counts().reset_index()
-# count_df.columns = ['nationality_y', 'count']
+elif option_chosen == 'Grand Prix Information':
+    st.sidebar.write("Grand Prix information content goes here")
+    # Add your Grand Prix information content here
 
-# #Plotting the bar chart using Plotly
-# fig = px.bar(count_df, 
-#              x='nationality_y', 
-#              y='count',
-#              title='Different Nationalities on the Grid')
-
-# #Adjust the figure size and labels
-# fig.update_layout(width=300, height=300,
-#                   xaxis_title='Nationality',
-#                   yaxis_title='Count')
-
-# #Display the bar chart in the Streamlit app
-# col2.plotly_chart(fig)
-
-
-# #Column 3
-# col3.metric("Humidity", "86%", "4%")
-
-
-# ######## Sidebar definitions ########
-# st.sidebar.header('F1 Data Hub')
-
-# #Driver selection selectbox
-# st.sidebar.subheader("Driver Selection")
-# # driver_selbox = st.sidebar.selectbox('Filter By Driver', (driver_names.driverRef))
-# # Create a sidebar selectbox to choose a driver
-# selected_driver = st.sidebar.selectbox("Select a Driver", new_era_unique['driverRef'])
-
-# # Filter the DataFrame based on the selected driver
-# filtered_data = new_era_unique[new_era_unique['driverRef'] == selected_driver]
-
-# # Display the selected driver's nationality using st.metric
-# st.metric(label=f"Nationality of {selected_driver}", value=filtered_data['nationality_y'].iloc[0])
-
-
-#Constructor Selection selectbox
-st.sidebar.subheader("Constructor Selection")
-team_selbox = st.sidebar.selectbox('Filter By Constructor', (team_names.constructorRef))
-
-
-
-
-import streamlit as st
-import pandas as pd
-import plotly.express as px
-
-
-# Create a sidebar selectbox to choose a driver
-selected_driver = st.sidebar.selectbox("Select a Driver", [None] + list(new_era_unique['driverRef']))
-
-# Check if the selected driver is None or a specific driver
-if selected_driver is None:
-    # Display the bar chart of counts per nationality
-    fig = px.bar(new_era_unique.groupby('nationality_x').size().reset_index(name='count'), 
-                 x='nationality_x', 
-                 y='count',
-                 title='Count of Drivers per Nationality')
-
-    # Update axis labels
-    fig.update_layout(
-        xaxis_title='Nationality',
-        yaxis_title='Count'
-    )
-
-    # Display the bar chart in the Streamlit app
-    col2.plotly_chart(fig)
-else:
-    # Filter the DataFrame based on the selected driver
-    filtered_data = new_era_unique[new_era_unique['driverRef'] == selected_driver]
-
-    # Display the selected driver's nationality using st.metric
-    col2.metric(label=f"Nationality of {selected_driver}", value=filtered_data['nationality_x'].iloc[0])
-
-
-
+elif option_chosen is None:
+    st.sidebar.write("Select an option to display relevant content")
+    # Add default content here
 
 
 
@@ -185,6 +212,6 @@ else:
 st.sidebar.markdown('''
 ---
 Website developed for the \n Capstone Project Course
-                    
+                
                     © AiTHLETES  
-''') 
+''')
