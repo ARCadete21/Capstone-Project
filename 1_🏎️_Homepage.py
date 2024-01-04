@@ -30,4 +30,4 @@ st.sidebar.markdown('''
 Website developed for the \n Capstone Project Course
                     
                     © AiTHLETES  
-''') 
+''')

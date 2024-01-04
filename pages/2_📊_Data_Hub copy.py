@@ -23,10 +23,11 @@ st.set_page_config(
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-#### Importing the datasets from our github repo that will be used to create the visualizations
+#### Importing the datasets from our github repo that will be used to create the visualizations ###
+#Data that was used for the modelling
 new_era = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Project/cadete/data2022_2023.csv") #for general use
 
-#Data for drivers tab
+#Data for drivers info tab
 drivers_data = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Project/main/data/drivers.csv")
 constructors_data = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Project/main/data/constructors.csv")
 # Merge datasets based on 'driverRef'
@@ -38,6 +39,23 @@ merged_drivers['driver_name'] = merged_drivers['forename'] + ' ' + merged_driver
 
 # year int
 merged_drivers['year'] = merged_drivers['year'].astype('Int32')
+
+driver_nations = {'American' : '🇺🇸', 'British': '🇬🇧', 'Thai': '🇹🇭',
+                  'Australian': '🇦🇺', 'Japanese': '🇯🇵', 'Canadian': '🇨🇦',
+                  'Spanish': '🇪🇸', 'Dutch': '🇳🇱', 'German': '🇩🇪',
+                  'Monegasque': '🇲🇨', 'French': '🇫🇷' , 'Finnish': '🇫🇮',
+                  'Chinese': '🇨🇳', 'Mexican': '🇲🇽', 'Danish': '🇩🇰'
+}
+
+
+
+
+#Data for drivers when driver is none
+none_driver = merged_drivers[['grid', 'positionOrder', 'driverRef', 'driver_name', 
+                             'milliseconds_x', 'nationality_x', 'status',
+                             'circuitRef', 'year']]
+
+
 
 # Sample mapping of constructorRef values to image paths
 # constructor_logos = {
@@ -53,32 +71,63 @@ merged_drivers['year'] = merged_drivers['year'].astype('Int32')
 #     'Alfa Romeo': 'https://media.formula1.com/image/upload/content/dam/fom-website/manual/teams/Sauber/Alfa_Romeo_Racing_logo.jpg'
 # }
 
-driver_nations = {'American' : '🇺🇸', 'British': '🇬🇧', 'Thai': '🇹🇭',
-                  'Australian': '🇦🇺', 'Japanese': '🇯🇵', 'Canadian': '🇨🇦',
-                  'Spanish': '🇪🇸', 'Dutch': '🇳🇱', 'German': '🇩🇪',
-                  'Monegasque': '🇲🇨', 'French': '🇫🇷' , 'Finnish': '🇫🇮',
-                  'Chinese': '🇨🇳', 'Mexican': '🇲🇽', 'Danish': '🇩🇰'
-}
 
 
-
-#Constructor Selection selectbox
+#Main Sidebar selectbox
 st.sidebar.subheader("What are you looking for?")
+
 select_opts = ['Driver Information', 
                'Constructor Statistics', 
                'Grand Prix Information',
                'Historical Data']
-# Driver statistics, Constructor Statistics, Grand Prix information
+# Driver statistics, Constructor Statistics, Grand Prix information, etc.
 option_chosen = st.sidebar.selectbox('Select your option', [None] + select_opts)
+
+
 
 if option_chosen == 'Driver Information':
     selected_driver = st.selectbox("Select a driver:", [None] + merged_drivers['driver_name'].sort_values().unique().tolist(), 
                                    index=0, key="driver_selectbox")
-    #Sidebar specifics
-    st.sidebar.selectbox('Select Year', merged_drivers['year'].unique())
-    st.sidebar.write(f"Driver selected: {selected_driver}")
+    
+    # Sidebar specifics
+    selected_year = st.sidebar.selectbox('Select Year', merged_drivers['year'].unique())
+    st.sidebar.write(f"Driver selected: {selected_driver}, Year selected: {selected_year}")
+    
     # Add your driver statistics content here
     if selected_driver is None:
+        # Driver Standings
+
+        # Initializing columns to display data
+        col1, col2, col3= st.columns(3)
+
+        # Add a new column 'positions_gained' representing positions gained per race
+        none_driver['positions_gained'] = none_driver['grid'] - none_driver['positionOrder']
+
+        # Filter data for the selected year
+        selected_year_data = none_driver[none_driver['year'] == selected_year]
+
+        # Display the top 3 gainers in the selected year
+        top_gainers = selected_year_data.groupby('driver_name')['positions_gained'].mean().nlargest(5).round(1)
+
+        # Displaying the data
+        col1.st.write(f"Top 3 Drivers Gaining Positions in {selected_year}:")
+        col1.st.write(top_gainers)
+
+        # Display top 3 losers 
+        top_losers = selected_year_data.groupby('driver_name')['positions_gained'].mean().nsmallest(5).round(1)
+
+        # Displaying the data
+        col1.st.write(f"Top 3 Drivers Gaining Positions in {selected_year}:")
+        col1.st.write(top_gainers)
+
+
+        #Drivers with more pos. lost
+        #Drivers with most top 3
+        #Drivers with most wins
+        #Drivers with most DNFs
+        #Boxplot with miliseconds variation (to display consistency)
+        #Line Chart comparing finishing position
+        #Histogram with nationalities
         #Inserir general graficos
         st.text('narah yet')
 
@@ -100,8 +149,6 @@ if option_chosen == 'Driver Information':
         #Column 2
         selected_driver_team = merged_drivers.loc[merged_drivers['driver_name'] == selected_driver, 'name'].iloc[0]
         col2.metric(f"{selected_driver} drives for", selected_driver_team)
-
-        
 
 
 
@@ -135,6 +182,6 @@ elif option_chosen is None:
 st.sidebar.markdown('''
 ---
 Website developed for the \n Capstone Project Course
-                    
+                
                     © AiTHLETES  
-''') 
+''')
