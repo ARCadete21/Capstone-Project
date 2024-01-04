@@ -3,9 +3,11 @@ import streamlit as st
 import pandas as pd
 
 #Used to create some of the plots
+import plotly.express as px
+
 #import plost as pls
 #import matplotlib.pyplot as plt
-#import plotly.express as px
+
 
 #Maybe to use option menus
 from streamlit_option_menu import option_menu
@@ -49,12 +51,10 @@ driver_nations = {'American' : '🇺🇸', 'British': '🇬🇧', 'Thai': '🇹�
 
 
 
-
 #Data for drivers when driver is none
 none_driver = merged_drivers[['grid', 'positionOrder', 'driverRef', 'driver_name', 
                              'milliseconds_x', 'nationality_x', 'status',
                              'circuitRef', 'year']]
-
 
 
 # Sample mapping of constructorRef values to image paths
@@ -91,14 +91,15 @@ if option_chosen == 'Driver Information':
     
     # Sidebar specifics
     selected_year = st.sidebar.selectbox('Select Year', merged_drivers['year'].unique())
-    st.sidebar.write(f"Driver selected: {selected_driver}, Year selected: {selected_year}")
-    
+
     # Add your driver statistics content here
     if selected_driver is None:
         # Driver Standings
+        
 
+        ###### Row A of data displaying#######
         # Initializing columns to display data
-        col1, col2, col3= st.columns(3)
+        col1, col2= st.columns(2)
 
         # Add a new column 'positions_gained' representing positions gained per race
         none_driver['positions_gained'] = none_driver['grid'] - none_driver['positionOrder']
@@ -106,25 +107,54 @@ if option_chosen == 'Driver Information':
         # Filter data for the selected year
         selected_year_data = none_driver[none_driver['year'] == selected_year]
 
-        # Display the top 3 gainers in the selected year
+        # Display the top 5 gainers in the selected year using st.metric
         top_gainers = selected_year_data.groupby('driver_name')['positions_gained'].mean().nlargest(5).round(1)
+        col1.write(f"Top 5 Position Gainers in {selected_year}:")
+        for driver, positions_gained in top_gainers.items():
+            col1.metric(label=driver, value=positions_gained)
 
-        # Displaying the data
-        col1.st.write(f"Top 3 Drivers Gaining Positions in {selected_year}:")
-        col1.st.write(top_gainers)
-
-        # Display top 3 losers 
+        # Display top 5 losers using st.metric
         top_losers = selected_year_data.groupby('driver_name')['positions_gained'].mean().nsmallest(5).round(1)
+        col2.write(f"Top 5 Position Losers in {selected_year}:")
+        for driver, positions_lost in top_losers.items():
+            col2.metric(label=driver, value=positions_lost)
 
-        # Displaying the data
-        col1.st.write(f"Top 3 Drivers Gaining Positions in {selected_year}:")
-        col1.st.write(top_gainers)
-
-
-        #Drivers with more pos. lost
-        #Drivers with most top 3
+        ###### Row B ######
         #Drivers with most wins
+        winner_counts = selected_year_data[selected_year_data['positionOrder'] == 1].groupby('driver_name').size()
+
+        gp_winners = winner_counts.nlargest(5)
+
+        # Create a horizontal bar chart using plotly express
+        fig = px.bar(gp_winners, x=gp_winners.values, 
+                     y=gp_winners.index, 
+                     orientation='h', 
+                     title=f"Top 5 Drivers with more Wins in {selected_year}")
+
+        # Display the chart using st.plotly_chart
+        col1.plotly_chart(fig)
+
+
+        # Drivers with most top 3
+        # Count the occurrences of each driver in the top 3 positions
+        top3_counts = selected_year_data[selected_year_data['positionOrder'] <= 3].groupby('driver_name').size()
+
+        top3_drivers = top3_counts.nlargest(5)
+
+        # Create a horizontal bar chart using plotly express
+        fig = px.bar(top3_drivers, x=top3_drivers.values, 
+                     y=top3_drivers.index, 
+                     orientation='h', 
+                     title=f"Top 5 Drivers with more Podiums in {selected_year}")
+
+        # Display the chart using st.plotly_chart
+        col2.plotly_chart(fig)
+
+
+        
+        
         #Drivers with most DNFs
+        
         #Boxplot with miliseconds variation (to display consistency)
         #Line Chart comparing finishing position
         #Histogram with nationalities
