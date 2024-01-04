@@ -5,24 +5,6 @@ from warnings import simplefilter
 simplefilter("ignore")  # ignore warnings to clean up output cells
 
 import matplotlib.pyplot as plt
-# Set Matplotlib defaults
-plt.rc("figure", autolayout=True, figsize=(11, 4))
-plt.rc(
-    "axes",
-    labelweight="bold",
-    labelsize="large",
-    titleweight="bold",
-    titlesize=14,
-    titlepad=10,
-)
-plot_params = dict(
-    color="0.75",
-    style=".-",
-    markeredgecolor="0.25",
-    markerfacecolor="0.25",
-    legend=False,
-)
-%config InlineBackend.figure_format = 'retina'
 
 
 # DATA #
