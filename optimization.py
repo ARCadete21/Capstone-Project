@@ -100,7 +100,7 @@ import random
 '''
 
 # seleciona drivers ate o budget ser fully gasto
-'''def optimal_team(drivers_cost, drivers_points, constructors_cost, constructors_points, budget, driver_order, carrinhos):
+def optimal_team(drivers_cost, drivers_points, constructors_cost, constructors_points, budget, driver_order, carrinhos):
     
     n = len(drivers_points)
     m = len(constructors_points)
@@ -159,9 +159,9 @@ import random
     print("\nSelected constructors:")
     for constructor_index in selected_constructors:
         print(f"{carrinhos[constructor_index]} - Points: {constructors_points[constructor_index]}, Cost: {constructors_cost[constructor_index]}")
-'''
 
-def optimal_team(drivers_cost, drivers_points, constructors_cost, constructors_points, budget, driver_order, carrinhos):
+
+'''def optimal_team(drivers_cost, drivers_points, constructors_cost, constructors_points, budget, driver_order, carrinhos):
     
     n = len(drivers_points)
     m = len(constructors_points)
@@ -226,7 +226,7 @@ def optimal_team(drivers_cost, drivers_points, constructors_cost, constructors_p
     remaining_budget = budget - spent_budget
     print(f"\nTotal budget spent: {spent_budget}")
     print(f"Remaining budget: {remaining_budget}")
-
+'''
 
 
 
