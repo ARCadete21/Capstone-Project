@@ -67,18 +67,18 @@ driver_photos_2023 = {
     'Nyck de Vries': 'https://media.formula1.com/content/dam/fom-website/drivers/2023Drivers/devries.jpg.img.',
 }
 
-constructor_logos = {
-    'Mercedes': 'https://yt3.googleusercontent.com/GAn-iyc9QWZT_RsxaGRuX7deb8AP2dJRo9N8XOjYeciqQMC6AP00zNTXQXqiApHN3QtmsAYK=s900-c-k-c0x00ffffff-no-rj',
-    'Red Bull': 'https://liquipedia.net/commons/images/d/d8/Red_Bull_Racing_allmode.png',
-    'McLaren': 'https://logowik.com/content/uploads/images/mclaren-formula-1-team8249.logowik.com.webp',
-    'Aston Martin': 'https://logowik.com/content/uploads/images/aston-martin-cognizant-formula-one-team6133.jpg',
-    'AlphaTauri': 'https://upload.wikimedia.org/wikipedia/en/thumb/0/09/Scuderia_Alpha-Tauri.svg/1200px-Scuderia_Alpha-Tauri.svg.png',
-    'Haas F1 Team': 'https://branditechture.agency/brand-logos/wp-content/uploads/wpdm-cache/Haas-F1-Team-900x0.png',
-    'Alpine F1 team': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Alpine_F1_Team_Logo.svg/2233px-Alpine_F1_Team_Logo.svg.png',
-    'Williams': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Logo_Williams_F1.png/1280px-Logo_Williams_F1.png',
-    'Ferrari': 'https://w7.pngwing.com/pngs/733/606/png-transparent-scuderia-ferrari-laferrari-car-formula-1-ferrari-logo-signage-ferrari-thumbnail.png',
-    'Alfa Romeo': 'https://media.formula1.com/image/upload/content/dam/fom-website/manual/teams/Sauber/Alfa_Romeo_Racing_logo.jpg'
-}
+# constructor_logos = {
+#     'Mercedes': 'https://yt3.googleusercontent.com/GAn-iyc9QWZT_RsxaGRuX7deb8AP2dJRo9N8XOjYeciqQMC6AP00zNTXQXqiApHN3QtmsAYK=s900-c-k-c0x00ffffff-no-rj',
+#     'Red Bull': 'https://liquipedia.net/commons/images/d/d8/Red_Bull_Racing_allmode.png',
+#     'McLaren': 'https://logowik.com/content/uploads/images/mclaren-formula-1-team8249.logowik.com.webp',
+#     'Aston Martin': 'https://logowik.com/content/uploads/images/aston-martin-cognizant-formula-one-team6133.jpg',
+#     'AlphaTauri': 'https://upload.wikimedia.org/wikipedia/en/thumb/0/09/Scuderia_Alpha-Tauri.svg/1200px-Scuderia_Alpha-Tauri.svg.png',
+#     'Haas F1 Team': 'https://branditechture.agency/brand-logos/wp-content/uploads/wpdm-cache/Haas-F1-Team-900x0.png',
+#     'Alpine F1 team': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Alpine_F1_Team_Logo.svg/2233px-Alpine_F1_Team_Logo.svg.png',
+#     'Williams': 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Logo_Williams_F1.png/1280px-Logo_Williams_F1.png',
+#     'Ferrari': 'https://w7.pngwing.com/pngs/733/606/png-transparent-scuderia-ferrari-laferrari-car-formula-1-ferrari-logo-signage-ferrari-thumbnail.png',
+#     'Alfa Romeo': 'https://media.formula1.com/image/upload/content/dam/fom-website/manual/teams/Sauber/Alfa_Romeo_Racing_logo.jpg'
+# }
 
 
 ######## Setting the overall page configuration ########
@@ -117,7 +117,17 @@ merged_drivers = pd.merge(new_era, drivers_data[['driverRef', 'forename', 'surna
 merged_drivers = pd.merge(merged_drivers, constructors_data[['constructorRef', 'name']], on='constructorRef', how='left')
 #Adding track info & races info
 merged_drivers = pd.merge(merged_drivers, circuits_data[['circuitRef', 'track_name', 'location', 'country', 'circuitId']], on='circuitRef', how='left') #possible to add lat, lng, alt
-merged_drivers = pd.merge(merged_drivers, race_data[['circuitId','date', 'gp_name']], on='circuitId', how='left')
+
+####### tá good
+
+# Drop duplicates from the 'circuitId' column in race_data
+race_data_unique = race_data.drop_duplicates('circuitId')
+###############################################################################
+# Perform the left merge without duplicating rows
+merged_drivers = pd.merge(merged_drivers, race_data_unique[['circuitId', 'date', 'gp_name']], on='circuitId', how='left')
+
+#######################
+
 #Renaming the imported date column to gp_date, to know what it regards
 merged_drivers.rename(columns = {'date': 'gp_date'}, inplace=True)
 
@@ -133,21 +143,21 @@ merged_drivers.rename(columns= {'name': 'team_name'}, inplace=True)
 merged_drivers['dob'] = pd.to_datetime(merged_drivers['dob'])
 merged_drivers['dob'] = merged_drivers['dob'].dt.strftime('%d-%m-%Y')
 
-#Converting gp_date from object to datetime datatype
+# #Converting gp_date from object to datetime datatype
 merged_drivers['gp_date'] = pd.to_datetime(merged_drivers['gp_date'])
-merged_drivers['gp_date'] = merged_drivers['gp_date'].dt.strftime('%d-%m-%Y')
+# merged_drivers['gp_date'] = merged_drivers['gp_date'].dt.strftime('%d-%m-%Y')
 
 
 # Convert the 'year' column to the appropriate data type (e.g., int)
 merged_drivers['year'] = merged_drivers['year'].astype(int)
 
 
-'''
-note to self:
-columns to be used when driver is none:  
-'grid', 'positionOrder', 'driverRef', 'driver_name', 'milliseconds_x', 
-'nationality_x','status', 'circuitRef', 'year'
-'''
+# '''
+# note to self:
+# columns to be used when driver is none:  
+# 'grid', 'positionOrder', 'driverRef', 'driver_name', 'milliseconds_x', 
+# 'nationality_x','status', 'circuitRef', 'year'
+# '''
 
 
 #Main Sidebar selectbox
