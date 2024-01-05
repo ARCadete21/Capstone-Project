@@ -3,42 +3,80 @@ import numpy as np
 import ast
 
 # attempt to get the cost and points from the fantasy
-'''dr_data = pd.read_csv('data/F1_23_drivers_basic.csv').drop(columns=['color', 'constructor'])
+dr_data = pd.read_csv('data/F1_23_drivers_basic.csv').drop(columns=['color', 'constructor'])
 ct_data = pd.read_csv('data/F1_23_constructors_basic.csv').drop(columns=['color', 'constructor'])
 
-verstapen_results = ast.literal_eval(dr_data.race_results[0])
+def extract_values(string):
+    # Convert the string representation of the list of dictionaries to an actual list
+    lst = ast.literal_eval(string)
 
-# Normalize the nested dictionaries into columns
-df = pd.json_normalize(verstapen_results)
+    # Extracting the required values
+    weekend_points = lst[0]['results_per_race_list']
+    price_at_lock = lst[1]['results_per_race_list']
 
-df = df.loc[:,['id', 'results_per_aggregation_list','results_per_race_list']]
-
-df.iloc[:,-1][:2]
-
-
-
-for driver_index in dr_data:
-    
-    driver_results = ast.literal_eval(dr_data.race_results[driver_index])
-    
-    create_df = pd.json_normalize(driver_results)
-    
-    create_df = create_df.loc[:,['id', 'results_per_aggregation_list','results_per_race_list']]
-    
-    print(create_df.iloc[:,-1][:2])'''
+    return weekend_points, price_at_lock
 
 
+# Function to extract the values from the nested lists and create new columns
+def extract_columns(row, column):
+    return pd.Series(row[column])
 
 
+################### GETTING DRIVERS COST AND POINTS WEEKLY #####################
+
+# Apply the extract_values function to 'race_results' column to get two separate columns
+dr_data[['weekend_points', 'price_at_lock']] = pd.DataFrame(dr_data['race_results'].apply(extract_values).tolist())
+
+# Create new columns for each value within 'weekend_points' and 'price_at_lock'
+weekend_points_df = pd.DataFrame(dr_data['weekend_points'].tolist(), columns=[f'weekend_point_{i}' for i in range(1, 23)])
+price_at_lock_df = pd.DataFrame(dr_data['price_at_lock'].tolist(), columns=[f'price_at_lock_{i}' for i in range(1, 23)])
+
+# Concatenate the new columns with the existing DataFrame
+data = pd.concat([dr_data, weekend_points_df, price_at_lock_df], axis=1)
+
+# Drop the original 'weekend_points' and 'price_at_lock' columns
+data.drop(columns=['race_results', 'weekend_points', 'price_at_lock'], inplace=True)
 
 
+race_dict = {}
+for col in range(1, 23):
+    race_data = {}
+    for idx, row in data.iterrows():
+        driver = row['abbreviation']
+        weekend_points = row[f'weekend_point_{col}']
+        price_at_lock = row[f'price_at_lock_{col}']
+        race_data[driver] = [price_at_lock, weekend_points]
+    race_dict[col] = race_data
 
 
+race_dict[2]['OCO']
+
+########################### CONSTRUCTORS COST AND WEEKLY POINTS ################
+
+# Apply the extract_values function to 'race_results' column to get two separate columns
+ct_data[['weekend_points', 'price_at_lock']] = pd.DataFrame(ct_data['race_results'].apply(extract_values).tolist())
+
+# Create new columns for each value within 'weekend_points' and 'price_at_lock'
+weekend_points_df = pd.DataFrame(ct_data['weekend_points'].tolist(), columns=[f'weekend_point_{i}' for i in range(1, 23)])
+price_at_lock_df = pd.DataFrame(ct_data['price_at_lock'].tolist(), columns=[f'price_at_lock_{i}' for i in range(1, 23)])
+
+# Concatenate the new columns with the existing DataFrame
+data = pd.concat([ct_data, weekend_points_df, price_at_lock_df], axis=1)
+
+# Drop the original 'weekend_points' and 'price_at_lock' columns
+data.drop(columns=['race_results', 'weekend_points', 'price_at_lock'], inplace=True)
 
 
-
-
-
+race_dict = {}
+for col in range(1, 23):
+    race_data = {}
+    for idx, row in data.iterrows():
+        constructor = row['abbreviation']
+        weekend_points = row[f'weekend_point_{col}']
+        price_at_lock = row[f'price_at_lock_{col}']
+        race_data[constructor] = [price_at_lock, weekend_points]
+    race_dict[col] = race_data
+##########################################################################################
 
 
 
