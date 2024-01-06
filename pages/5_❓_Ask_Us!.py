@@ -1,11 +1,6 @@
 import streamlit as st
 import sqlite3
 
-st.subheader("Do you have any question? Feel free to ask us!")
-st.markdown("")
-st.markdown("Fill in the form below!")
-st.markdown("")
-
 # Connect to SQLite database
 conn = sqlite3.connect('your_database_name.db')
 c = conn.cursor()
@@ -23,23 +18,27 @@ def view_all_questions():
     data = c.fetchall()
     return data
 
-
 # Streamlit UI
 create_table()
 
+st.subheader("Do you have any questions? Feel free to ask us!")
+st.markdown("")
+st.markdown("Fill in the form below!")
+st.markdown("")
 
-#Asking the user to insert his name
+# Asking the user to insert his name
 name = st.text_input("Name:", max_chars=40)
-#Title of the request
+# Title of the request
 question_title = st.text_input("State your question briefly (Title of your Request)", max_chars=100)
-#Corpus of the question
+# Corpus of the question
 question = st.text_area("Insert your question explained here")
-#Entering date
+# Entering date
 qdate = st.date_input("Enter the current date:")
 
 if st.button("Add"):
-    add_data(name, question_title, question, qdate)
-    st.success(f"Question: {question_title} saved")
+    with conn:
+        add_data(name, question_title, question, qdate)
+        st.write(f"Question: {question_title} saved")
 
 # Close the connection when done
 conn.close()

@@ -129,6 +129,59 @@ driver_colors_2023 = {
     'Nyck de Vries': '#2B4562',
 }
 
+driver_helmets_2022 = {
+    'Daniel Ricciardo': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/ricciardo.png',
+    'Lando Norris': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/norris.png',
+    'Lewis Hamilton': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/hamilton.png',
+    'George Russell': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/russell.png',
+    'Alexander Albon': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/albon.png',
+    'Carlos Sainz': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/sainz.png',
+    'Charles Leclerc': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/leclerc.png',
+    'Esteban Ocon': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/ocon.png',
+    'Fernando Alonso': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/alonso.png',
+    'Lance Stroll': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/stroll.png',
+    'Valtteri Bottas': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/bottas.png',
+    'Guanyu Zhou': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/zhou.png',
+    'Sergio Pérez': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/perez.png',
+    'Max Verstappen': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/verstappen.png',
+    'Nico Hülkenberg': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/hulkenberg.png',
+    'Pierre Gasly': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/gasly.png',
+    'Yuki Tsunoda': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/tsunoda.png',
+    'Logan Sargeant': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/sargeant.png',
+    'Kevin Magnussen': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/magnussen.png',
+    'Nicholas Latifi': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/latifi.png',
+    'Nyck de Vries': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/devries.png',
+    'Sebastian Vettel': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/vettel.png',
+    'Mick Schumacher': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/schumacher.png',
+
+}
+
+
+driver_helmets_2023 = {
+    'Daniel Ricciardo': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2022/ricciardo.png',
+    'Lando Norris': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/norris.png',
+    'Lewis Hamilton': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/hamilton.png',
+    'George Russell': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/russell.png',
+    'Alexander Albon': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/albon.png',
+    'Carlos Sainz': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/sainz.png',
+    'Charles Leclerc': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/leclerc.png',
+    'Esteban Ocon': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/ocon.png',
+    'Fernando Alonso': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/alonso.png',
+    'Lance Stroll': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/stroll.png',
+    'Valtteri Bottas': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/bottas.png',
+    'Guanyu Zhou': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/zhou.png',
+    'Sergio Pérez': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/perez.png',
+    'Max Verstappen': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/verstappen.png',
+    'Nico Hülkenberg': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/hulkenberg.png',
+    'Pierre Gasly': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/gasly.png',
+    'Yuki Tsunoda': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/tsunoda.png',
+    'Logan Sargeant': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/sargeant.png',
+    'Kevin Magnussen': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/magnussen.png',
+    'Oscar Piastri': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/piastri.png',
+    'Nyck de Vries': 'https://media.formula1.com/content/dam/fom-website/manual/Helmets2023/devries.png',
+}
+
+
 
 # constructor_logos = {
 #     'Mercedes': 'https://yt3.googleusercontent.com/GAn-iyc9QWZT_RsxaGRuX7deb8AP2dJRo9N8XOjYeciqQMC6AP00zNTXQXqiApHN3QtmsAYK=s900-c-k-c0x00ffffff-no-rj',
@@ -245,7 +298,7 @@ select_opts = ['Driver Information',
 # Driver statistics, Constructor Statistics, Grand Prix information, etc.
 option_chosen = st.sidebar.selectbox('Select your option', [None] + select_opts)
 
-
+main_menu_indication = st.subheader("")
 
 if option_chosen == 'Driver Information':
     # Sidebar specifics
@@ -398,6 +451,9 @@ if option_chosen == 'Driver Information':
         #Initializing the columns
         col1, col2, col3 = st.columns(3)
 
+        # Filter data for the selected year
+        selected_year_data = merged_drivers[merged_drivers['year'] == selected_year]
+
         # Select the appropriate driver_photos dictionary based on the selected year
         driver_photos_dict = driver_photos_2022 if selected_year == 2022 else driver_photos_2023
 
@@ -409,61 +465,111 @@ if option_chosen == 'Driver Information':
         # Column 2
         #Personal Information
         #Driver's Nationality
-        selected_driver_nationality = merged_drivers.loc[merged_drivers['driver_name'] == selected_driver, 'nationality_x'].iloc[0]
+        selected_driver_nationality = selected_year_data.loc[selected_year_data['driver_name'] == selected_driver, 'nationality_x'].iloc[0]
         selected_driver_emoji = driver_nations.get(selected_driver_nationality, '')
         col2.metric("Driver Nationality", f"{selected_driver_nationality} \n {selected_driver_emoji}")
 
         #Driver's Age
-        selected_driver_age = merged_drivers.loc[(merged_drivers['driver_name'] == selected_driver) & (merged_drivers['year'] == selected_year), 'age'].iloc[0]
+        selected_driver_age = selected_year_data.loc[(selected_year_data['driver_name'] == selected_driver) & (selected_year_data['year'] == selected_year), 'age'].iloc[0]
         col2.metric(f"{selected_driver}'s Age", selected_driver_age)
         #DOB 
-        date_birth = merged_drivers.loc[merged_drivers['driver_name'] == selected_driver, 'dob'].iloc[0]
+        date_birth = selected_year_data.loc[selected_year_data['driver_name'] == selected_driver, 'dob'].iloc[0]
         col2.metric(f"{selected_driver}'s Date of Birth", date_birth)
 
         # Professional Info :)
         # Driver's Team
-        selected_driver_team = merged_drivers.loc[(merged_drivers['driver_name'] == selected_driver) & (merged_drivers['year'] == selected_year), 'team_name'].iloc[0]
+        selected_driver_team = selected_year_data.loc[(selected_year_data['driver_name'] == selected_driver) & (selected_year_data['year'] == selected_year), 'team_name'].iloc[0]
         col2.metric(f"{selected_driver} drives for", selected_driver_team)
         
         #Driver's No and Ref
-        selected_driver_no = merged_drivers.loc[(merged_drivers['driver_name'] == selected_driver) & (merged_drivers['year'] == selected_year), 'number'].iloc[0]
-        selected_driver_ref = merged_drivers.loc[merged_drivers['driver_name'] == selected_driver, 'code'].iloc[0]
+        selected_driver_no = selected_year_data.loc[(selected_year_data['driver_name'] == selected_driver) & (selected_year_data['year'] == selected_year), 'number'].iloc[0]
+        selected_driver_ref = selected_year_data.loc[selected_year_data['driver_name'] == selected_driver, 'code'].iloc[0]
         # Convert the tuple to a string
         driver_references = f"{selected_driver_ref}   | {selected_driver_no}"
 
         # Display the metric
         col2.metric(label="Driver references on the track", value=driver_references)
 
+
+        # Column 3
+        # Select the appropriate driver_helmets dictionary based on the selected year
+        driver_helmets_dict = driver_helmets_2022 if selected_year == 2022 else driver_helmets_2023
+
+        # Column 1
+        driver_helmet = driver_helmets_dict.get(selected_driver)
+        col3.markdown(f"{selected_driver}'s Helmet Livery")
+        col3.image(driver_helmet, use_column_width=True)
+
+
         #Displaying data of selected driver vs teammate
-        # #Line Chart comparing finishing position
-        # # Convert gp_date to datetime
-        # selected_year_data['gp_date'] = pd.to_datetime(selected_year_data['gp_date'])
+        ######## Stage 1 - Qualifying Position Comparison ########
+        # Choose the appropriate driver color dictionary based on the selected year
+        if selected_year == 2022:
+            driver_colors = driver_colors_2022
+        elif selected_year == 2023:
+            driver_colors = driver_colors_2023
 
-        # # Sort the DataFrame by gp_date
-        # selected_year_data.sort_values(by='gp_date', inplace=True)
+        # Convert gp_date to datetime
+        selected_year_data['gp_date'] = pd.to_datetime(selected_year_data['gp_date'])
 
-        # # Map team colors to the 'team_name' column
-        # selected_year_data['team_color'] = selected_year_data['team_name'].map(team_colors)
+        # Sort the DataFrame by gp_date
+        selected_year_data.sort_values(by='gp_date', inplace=True)
 
-        # # Plotting using Plotly Express
-        # fig = px.line(selected_year_data, x='gp_date', y='positionOrder', color='team_name',
-        #             line_group='code',  # Use code as the line group to have one line per driver
-        #             markers=True, line_shape='linear', labels={'finishing_position': 'Finishing Position'},
-        #             color_discrete_map=team_colors)
+        # Filter data for the selected driver and his teammate
+        team_name_selected_driver = selected_year_data.loc[
+            selected_year_data['driver_name'] == selected_driver, 'team_name'].iloc[0]
 
-        # # Stretch the plot to take the length of the whole main page
-        # fig.update_layout(width=1850)
+        selected_driver_data = selected_year_data[selected_year_data['driver_name'] == selected_driver]
+        teammate_data = selected_year_data[(selected_year_data['team_name'] == team_name_selected_driver) & 
+                                            (selected_year_data['driver_name'] != selected_driver)]
 
-        # # Customize layout
-        # fig.update_layout(title='Finishing Positions of Drivers in Each Race',
-        #                 xaxis_title='Race Date',
-        #                 yaxis_title='Finishing Position',
-        #                 legend_title='Driver Code')
+        # Concatenate data for selected driver and teammate
+        filtered_data = pd.concat([selected_driver_data, teammate_data])
 
-        # # Display the plot in Streamlit
-        # st.plotly_chart(fig)
+        # Create a new column for driver color
+        filtered_data['driver_color'] = filtered_data['driver_name'].map(driver_colors)
+
+        # Plotting using Plotly Express
+        fig = px.line(filtered_data, x='round', y='grid', color='driver_name',
+                    markers=True, line_shape='linear', labels={'grid': 'Qualifying Position'},
+                    color_discrete_map=driver_colors)
+
+        # Stretch the plot to take the length of the whole main page
+        fig.update_layout(width=1400)
+
+        # Customize layout
+        fig.update_layout(title=f'Comparison of {selected_driver} and Teammate Qualifying Positions',
+                        xaxis_title='Race Week',
+                        yaxis_title='Qualifying Position',
+                        legend_title='Driver Code')
+
+        # Invert the y-axis order
+        fig.update_yaxes(autorange="reversed")
+
+        # Display the plot in Streamlit
+        st.plotly_chart(fig)
 
 
+        ######## Stage 2 - Race Position Comparison ###########
+        # Plotting using Plotly Express
+        fig = px.line(filtered_data, x='round', y='positionOrder', color='driver_name',
+                    markers=True, line_shape='linear', labels={'positionOrder': 'Finishing Position'},
+                    color_discrete_map=driver_colors)
+
+        # Stretch the plot to take the length of the whole main page
+        fig.update_layout(width=1400)
+
+        # Customize layout
+        fig.update_layout(title=f'Comparison of {selected_driver} and Teammate Finishing Positions',
+                        xaxis_title='Race Date',
+                        yaxis_title='Finishing Position',
+                        legend_title='Driver Code')
+
+        # Invert the y-axis order
+        fig.update_yaxes(autorange="reversed")
+
+        # Display the plot in Streamlit
+        st.plotly_chart(fig)
 
 
 
