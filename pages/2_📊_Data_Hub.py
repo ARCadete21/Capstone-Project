@@ -9,15 +9,13 @@ import plotly.express as px
 #import matplotlib.pyplot as plt
 
 
-#Maybe to use option menus
-from streamlit_option_menu import option_menu
-
 #Useful Dictionaries
 driver_nations = {'American' : '🇺🇸', 'British': '🇬🇧', 'Thai': '🇹🇭',
                   'Australian': '🇦🇺', 'Japanese': '🇯🇵', 'Canadian': '🇨🇦',
                   'Spanish': '🇪🇸', 'Dutch': '🇳🇱', 'German': '🇩🇪',
                   'Monegasque': '🇲🇨', 'French': '🇫🇷' , 'Finnish': '🇫🇮',
                   'Chinese': '🇨🇳', 'Mexican': '🇲🇽', 'Danish': '🇩🇰'}
+
 driver_photos_2022 = {
     'Daniel Ricciardo': 'https://media.formula1.com/content/dam/fom-website/drivers/2022Drivers/ricciardo.jpg.img.',
     'Lando Norris': 'https://media.formula1.com/content/dam/fom-website/drivers/2022Drivers/norris.jpg.img.',
@@ -101,30 +99,35 @@ new_era = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Pro
 drivers_data = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Project/main/data/drivers.csv")
 constructors_data = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Project/main/data/constructors.csv")
 
+
+#Data of Circuits
 circuits_data = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Project/main/data/circuits.csv")
 #altering a specific circuits_data column to avoid confusion
 circuits_data.rename(columns = {'name': 'track_name'}, inplace=True)
 
+
+#Data of Races
 race_data = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Project/main/data/races.csv")
 #altering a specific race_data column to avoid confusion
 race_data.rename(columns = {'name': 'gp_name'}, inplace=True)
+# Convert the 'date' column in race_data to datetime format
+race_data['date'] = pd.to_datetime(race_data['date'])
+# Filter races that occurred in or after 2022
+filtered_race_data = race_data[race_data['date'].dt.year >= 2022]
+
 
 
 # Merge datasets based on 'driverRef'
+
 #Adding driver's personal info
 merged_drivers = pd.merge(new_era, drivers_data[['driverRef', 'forename', 'surname', 'dob', 'number', 'code']], on='driverRef', how='left')
 #Adding constructors info
 merged_drivers = pd.merge(merged_drivers, constructors_data[['constructorRef', 'name']], on='constructorRef', how='left')
 #Adding track info & races info
 merged_drivers = pd.merge(merged_drivers, circuits_data[['circuitRef', 'track_name', 'location', 'country', 'circuitId']], on='circuitRef', how='left') #possible to add lat, lng, alt
+#Adding every gp information
+merged_drivers = pd.merge(merged_drivers, filtered_race_data[['circuitId', 'year', 'gp_name', 'date', 'time']], on=['circuitId', 'year'], how='inner')
 
-####### tá good
-
-# # Drop duplicates from the 'circuitId' column in race_data
-# race_data_unique = race_data.drop_duplicates('circuitId')
-# ###############################################################################
-# # Perform the left merge without duplicating rows
-# merged_drivers = pd.merge(merged_drivers, race_data_unique[['circuitId', 'date', 'gp_name']], on='circuitId', how='left')
 
 #######################
 
