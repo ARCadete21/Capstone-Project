@@ -120,11 +120,11 @@ merged_drivers = pd.merge(merged_drivers, circuits_data[['circuitRef', 'track_na
 
 ####### tá good
 
-# Drop duplicates from the 'circuitId' column in race_data
-race_data_unique = race_data.drop_duplicates('circuitId')
-###############################################################################
-# Perform the left merge without duplicating rows
-merged_drivers = pd.merge(merged_drivers, race_data_unique[['circuitId', 'date', 'gp_name']], on='circuitId', how='left')
+# # Drop duplicates from the 'circuitId' column in race_data
+# race_data_unique = race_data.drop_duplicates('circuitId')
+# ###############################################################################
+# # Perform the left merge without duplicating rows
+# merged_drivers = pd.merge(merged_drivers, race_data_unique[['circuitId', 'date', 'gp_name']], on='circuitId', how='left')
 
 #######################
 
@@ -158,6 +158,8 @@ merged_drivers['year'] = merged_drivers['year'].astype(int)
 # 'grid', 'positionOrder', 'driverRef', 'driver_name', 'milliseconds_x', 
 # 'nationality_x','status', 'circuitRef', 'year'
 # '''
+
+
 
 
 #Main Sidebar selectbox

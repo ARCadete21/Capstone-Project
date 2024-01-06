@@ -2,7 +2,13 @@ Group 08 - AiTHLETES
 
  -- Prompt Links --
 
-Company Definition: Stage 1 (Comprises Company's Problem, Mission, Vision, Target Customers
+Customer Data Generation
+
+link: https://chat.openai.com/share/1870085e-2168-4cdb-bf5e-07d436c1aa5b
+
+---------
+
+Company Definition: Stage 1 (Comprises Company's Problem, Mission, Vision, Target Customers)
 
 link: https://chat.openai.com/share/d86a82b5-8277-4f90-ae9a-b92e5934e041
 
@@ -15,8 +21,6 @@ link: https://chat.openai.com/share/2c117c44-cb2c-4d42-9363-ff22f0cfc40c
 
 ---------
 
-Customer Data Generation
+30-second advertisement
 
-link: https://chat.openai.com/share/1870085e-2168-4cdb-bf5e-07d436c1aa5b
-
----------
+link: https://chat.openai.com/share/ef1bb1ea-c214-4011-aa5f-5f02cf847488
