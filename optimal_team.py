@@ -38,7 +38,7 @@ data = pd.concat([dr_data, weekend_points_df, price_at_lock_df], axis=1)
 data.drop(columns=['race_results', 'weekend_points', 'price_at_lock'], inplace=True)
 
 
-racer_dict = {}
+race_dict = {}
 for col in range(1, 23):
     race_data = {}
     for idx, row in data.iterrows():
@@ -46,10 +46,10 @@ for col in range(1, 23):
         weekend_points = row[f'weekend_point_{col}']
         price_at_lock = row[f'price_at_lock_{col}']
         race_data[driver] = [price_at_lock, weekend_points]
-    racer_dict[col] = race_data
+    race_dict[col] = race_data
 
 
-racer_dict[2]['OCO']
+race_dict[2]['OCO']
 
 ########################### CONSTRUCTORS COST AND WEEKLY POINTS ################
 
@@ -61,23 +61,21 @@ weekend_points_df = pd.DataFrame(ct_data['weekend_points'].tolist(), columns=[f'
 price_at_lock_df = pd.DataFrame(ct_data['price_at_lock'].tolist(), columns=[f'price_at_lock_{i}' for i in range(1, 23)])
 
 # Concatenate the new columns with the existing DataFrame
-ct_data = pd.concat([ct_data, weekend_points_df, price_at_lock_df], axis=1)
+data = pd.concat([ct_data, weekend_points_df, price_at_lock_df], axis=1)
 
 # Drop the original 'weekend_points' and 'price_at_lock' columns
-ct_data.drop(columns=['race_results', 'weekend_points', 'price_at_lock'], inplace=True)
+data.drop(columns=['race_results', 'weekend_points', 'price_at_lock'], inplace=True)
 
 
-constr_dict = {}
+race_dict = {}
 for col in range(1, 23):
     race_data = {}
-    for idx, row in ct_data.iterrows():
+    for idx, row in data.iterrows():
         constructor = row['abbreviation']
         weekend_points = row[f'weekend_point_{col}']
         price_at_lock = row[f'price_at_lock_{col}']
         race_data[constructor] = [price_at_lock, weekend_points]
-    constr_dict[col] = race_data
-    
-constr_dict[2]['RED']
+    race_dict[col] = race_data
 ##########################################################################################
 
 
