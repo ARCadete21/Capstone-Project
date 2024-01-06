@@ -6,11 +6,6 @@ def truncate_text(text, max_chars):
     return text[:max_chars] + '...' if len(text) > max_chars else text
 
 
-
-
-
-
-
 st.set_page_config(
     layout='wide',
     page_title='AiTHLETES F1 Hub | F1 Blog',
