@@ -188,16 +188,16 @@ driver_helmets_2023 = {
 
 
 constructor_logos = {
-    'Mercedes': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/mercedes.jpg',
-    'Red Bull': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/red%20bull.jpg',
-    'McLaren': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/mclaren.jpg',
-    'Aston Martin': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/aston%20martin.jpg',
-    'AlphaTauri': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/alphatauri.jpg',
-    'Haas F1 Team': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/haas.jpg',
-    'Alpine F1 Team': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/alpine.jpg',
-    'Williams': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/williams%20blue.jpg',
-    'Ferrari': 'https://media.formula1.com/content/dam/fom-website/teams/Ferrari/logo-ferrari-18%20.jpg',
-    'Alfa Romeo': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/alfa%20romeo.jpg'
+    'Mercedes': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/mercedes.png',
+    'Red Bull': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/red%20bull.png',
+    'McLaren': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/mclaren.png',
+    'Aston Martin': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/aston%20martin.png',
+    'AlphaTauri': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/alphatauri.png',
+    'Haas F1 Team': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/haas.png',
+    'Alpine F1 Team': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/alpine.png',
+    'Williams': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/williams%20blue.png',
+    'Ferrari': 'https://media.formula1.com/content/dam/fom-website/teams/Ferrari/logo-ferrari-18%20.png',
+    'Alfa Romeo': 'https://media.formula1.com/content/dam/fom-website/2018-redesign-assets/team%20logos/alfa%20romeo.png'
 }
 
 team_colors = {
@@ -938,7 +938,7 @@ elif option_chosen == 'Constructor Statistics':
 
 
 elif option_chosen == 'Grand Prix Information':
-    selected_gp = st.selectbox("Select the Grand Prix you want to view:", [None] + merged_drivers['gp_name'].sort_values().unique().tolist(), 
+    selected_gp = st.selectbox("Select the Grand Prix you want to view:", merged_drivers['gp_name'].sort_values().unique().tolist(), 
                                    index=0, key="gp_selectbox")
     
     # Use loc to select columns related to the selected Grand Prix
