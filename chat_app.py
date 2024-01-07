@@ -29,7 +29,7 @@ def initialize() -> None:
             value=prompts[0]["prompt"]
         )
 
-    st.sidebar.title("🤖 F1 ChatBot")
+    st.sidebar.title("🤖🏎️ F1 ChatBot")
 
     if "chatbot" not in st.session_state:
         st.session_state.chatbot = F1ChatBot(st.session_state.system_behavior)
@@ -73,7 +73,7 @@ def display_assistant_msg(message: str, animated=True):
     """
 
     if animated:
-        with st.chat_message("assistant", avatar="🤖"):
+        with st.chat_message("assistant", avatar="🤖🏎️"):
             message_placeholder = st.empty()
 
             # Simulate stream of response with milliseconds delay
@@ -87,7 +87,7 @@ def display_assistant_msg(message: str, animated=True):
 
             message_placeholder.markdown(full_response)
     else:
-        with st.chat_message("assistant", avatar="🤖"):
+        with st.chat_message("assistant", avatar="🤖🏎️"):
             st.markdown(message)
 
 
