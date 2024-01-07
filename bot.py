@@ -2,6 +2,10 @@ import os
 import pandas as pd
 import re
 import numpy as np
+import warnings
+
+warnings.filterwarnings("ignore")
+
 
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
@@ -17,7 +21,7 @@ from langchain_community.chat_models import ChatOpenAI
 
 
 from functions import *
-from
+from util import *
 ###################################### LOADING DATA FOR THE BOT #########################################
 
 '''#LOAD TEXT DATA
@@ -63,21 +67,20 @@ embeddings = OpenAIEmbeddings()
 db = FAISS.from_documents(text_chunks, embeddings)
 '''
 
-
-
-########################### QUERY ############################
+'''########################### QUERY ############################
 
 query = "Who won the 2023 Bahrain GP?"
 docs = db.similarity_search(query, k=3)
 print("Results:", docs)
 
-#############################################################
+'''#############################################################
 
-#llm = CTransformers(model_type="gpt-3.5-turbo", temperature=0.1)
-
+'''# MAIN #
 llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.1)
 
 pdf_data = preprocess_pdf_files_for_LLM(path = 'data/DataFiltered2022_2023/data filtered')
+csv_data = preprocess_csv_files_for_LLM(path = 'data/DataFiltered2022_2023/data filtered')
+
 
 qa = ConversationalRetrievalChain.from_llm(llm, retriever = pdf_data.as_retriever())
 
@@ -97,8 +100,57 @@ while True:
     results = qa({"chat_history": chat_history, "question": query})
     print('User:', query)
     print("Results:", results['answer'])
-    
-    
-    
-    
-    
+'''
+
+#prompt
+llm = ChatOpenAI(model_name ="gpt-3.5-turbo")
+
+prompt = f"Which driver id has the most podiums in the file i provided u?"
+
+response = llm(prompt, temperature = 0)
+
+print("----- response -----")
+print(response.replace("Langchain", ""))
+
+
+#read pdf
+pdf_data = PdfReader("data/DataFiltered2022_2023/data filtered/driver_standings.pdf")
+
+pdf_text = ""
+
+for i, page in enumerate(pdf_data.pages):
+    text = page.extract_text()
+    if text:
+        pdf_text += text
+
+print(len(pdf_text))
+
+#split the pdf text
+text_splitter = CharacterTextSplitter(
+    separator = "\n",
+    chunk_size = 400,
+    chunk_overlap = 100
+)
+
+final_data = text_splitter.split_text(pdf_text)
+
+print(f"""
+    # of Chunks: {len(final_data)}
+    Chunk 0: {final_data[0]}
+    Chunk 1: {final_data[1]}
+""")
+
+from langchain.chains.question_answering import load_qa_chain
+
+#embedding
+embeddings = OpenAIEmbeddings()
+document_searcher = FAISS.from_texts(final_data, embeddings)
+chain = load_qa_chain(ChatOpenAI(), chain_type="stuff")
+
+prompt = 'how many wins did the driver 830 won?'
+
+docs =  document_searcher.similarity_search(prompt)
+result = chain.run(input_documents=docs, question=prompt)
+
+print("--- 🤖 RESULT ---")
+print(result)
