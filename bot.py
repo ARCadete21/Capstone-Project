@@ -102,7 +102,8 @@ while True:
     print("Results:", results['answer'])
 '''
 
-#prompt
+#bot burro
+'''#prompt
 llm = ChatOpenAI(model_name ="gpt-3.5-turbo")
 
 prompt = f"Which driver id has the most podiums in the file i provided u?"
@@ -114,7 +115,7 @@ print(response.replace("Langchain", ""))
 
 
 #read pdf
-pdf_data = PdfReader("data/DataFiltered2022_2023/data filtered/driver_standings.pdf")
+pdf_data = PdfReader("data/data2223.pdf")
 
 pdf_text = ""
 
@@ -147,10 +148,50 @@ embeddings = OpenAIEmbeddings()
 document_searcher = FAISS.from_texts(final_data, embeddings)
 chain = load_qa_chain(ChatOpenAI(), chain_type="stuff")
 
-prompt = 'how many wins did the driver 830 won?'
+prompt = 'ze eu acabei de te dar todo um pdf com informacao, diz me so o id do driver com mais wins em 2022'
 
 docs =  document_searcher.similarity_search(prompt)
 result = chain.run(input_documents=docs, question=prompt)
 
 print("--- 🤖 RESULT ---")
-print(result)
+print(result)'''
+
+
+
+
+model="gpt-3.5-turbo"
+
+print("First LLM API example")
+print(f"✅ OpenAI Key loaded (...{local_settings.OPENAI_API_KEY[20:-20]}...)")
+print(f"✅ Model: {model}")
+
+client = OpenAI(api_key=local_settings.OPENAI_API_KEY)
+
+def get_completion(prompt, temperature= 0, messages = [], model=model):
+
+    message = {"role": "user", "content": prompt}
+
+    messages.append(message)
+
+    completion = client.chat.completions.create(
+        model=model,
+        messages=messages,
+        temperature=temperature,
+    )
+
+    return completion.choices[0].message.content
+
+messages = [
+    {
+        "system" : "You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. If you don't know the answer, just say that you don't know."
+    }
+]
+
+
+
+
+
+
+
+
+
