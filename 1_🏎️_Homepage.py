@@ -79,6 +79,11 @@ st.set_page_config(
     #menu_items = {'item': 'link'} could be interesting to explore (top right corner)
 )
 
+
+######## Setting a new style for the page ########
+with open('style.css') as f:
+    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
 st.markdown("<h2 style='font-weight: bold;'>Welcome to the AiTHLETES Formula One Hub!</h2>", unsafe_allow_html=True)
 
 
@@ -193,75 +198,77 @@ import base64
 
 def display_profile_settings(username):
     st.subheader("Profile Settings for {}".format(username))
-
-    # Fetch user data
     user_data = users.get(username, {})
-    current_password = st.text_input("Current Password", type='password')
-    new_password = st.text_input("New Password", type='password')
-    confirm_new_password = st.text_input("Confirm New Password", type='password')
 
-    if st.button("Update Password"):
-        if authenticate(username, current_password):
-            if new_password == confirm_new_password:
+    
+    if st.button("Change Password"):
+        # Fetch user data
+        current_password = st.text_input("Current Password", type='password')
+        new_password = st.text_input("New Password", type='password')
+        confirm_new_password = st.text_input("Confirm New Password", type='password')
+
+        if st.button("Update Password"):
+            if authenticate(username, current_password):
+                if new_password == confirm_new_password:
                 # Update the hashed password in your user data
-                users[username]["password"] = new_password
-                with open('users.json', 'w') as f:
-                    json.dump(users, f)
-                st.success("Password updated successfully!")
+                    users[username]["password"] = new_password
+                    with open('users.json', 'w') as f:
+                        json.dump(users, f)
+                    st.success("Password updated successfully!")
+                else:
+                    st.warning("New Passwords do not match.")
             else:
-                st.warning("New Passwords do not match.")
-        else:
-            st.warning("Incorrect Current Password")
-
-    # Additional user information
-    st.subheader("Additional Information")
+                st.warning("Incorrect Current Password")
+                
     
-    # Display signup date
-    signup_date = user_data.get("signup_date", "N/A")
-    st.write("Signup Date:", signup_date)
-
-    # Display and allow users to upload or change their profile image
     user_image_path = user_data.get("profile_image", "")
-    st.subheader("Profile Image")
-    
-    if st.button("Change Profile Image"):
+
+    if st.button('Upload your profile picture'):
+        
         uploaded_image = st.file_uploader("Upload Profile Image", type=["jpg", "jpeg", "png"])
-        if uploaded_image is not None:
+    
+        st.markdown('Insert your profile picture below:')
+        if st.button("Change Profile Image"):       
+            if uploaded_image is not None:
             # Save the uploaded image locally
-            uploads_folder = "uploads"
-            os.makedirs(uploads_folder, exist_ok=True)
-            user_image_path = os.path.join(uploads_folder, f"{username}_profile_image.png")
-            uploaded_image.save(user_image_path)
-            st.success("Profile Image uploaded successfully!")
+                uploads_folder = "uploads"
+                os.makedirs(uploads_folder, exist_ok=True)
+                user_image_path = os.path.join(uploads_folder, f"{username}_profile_image.png")
+                uploaded_image.save(user_image_path)
+                st.success("Profile Image uploaded successfully!")
+            
+        if os.path.exists(user_image_path):
+            with open(user_image_path, "rb") as img_file:
+                img_base64 = base64.b64encode(img_file.read()).decode("utf-8")
+                st.image(f"data:image/png;base64,{img_base64}", caption="Profile Image", use_column_width=True)
+            
+        
 
-    # Display user image using a base64 encoded representation
-    if os.path.exists(user_image_path):
-        with open(user_image_path, "rb") as img_file:
-            img_base64 = base64.b64encode(img_file.read()).decode("utf-8")
-            st.image(f"data:image/png;base64,{img_base64}", caption="Profile Image", use_column_width=True)
 
+
+    if st.button('Add cellphone number'):
     # Display user email
-    user_email = user_data.get("email", "")
-    new_email = st.text_input("New Email", value=user_email)
-    if st.button("Update Email"):
-        users[username]["email"] = new_email
-        with open('users.json', 'w') as f:
-            json.dump(users, f)
-        st.success("Email updated successfully!")
+        user_number = user_data.get("number", "")
+        new_number = st.text_input("Number", value=user_number)
+        if st.button("Add number"):
+            users[username]["number"] = new_number
+            with open('users.json', 'w') as f:
+                json.dump(users, f)
+            st.success("Email added successfully!")
 
     # You can add more profile settings here based on your requirements
 
 
 def main():
     menu_options = ["Home", "Registration", 'Settings']
-    selected_option = option_menu("Homepage Menu", menu_options, orientation="horizontal")
+    selected_option = option_menu("Select Menu", menu_options, orientation="horizontal")
 
   
 
     if selected_option == "Home":
             display_home_page()
     elif selected_option == 'Settings':
-            display_profile_settings(username='username')
+            display_profile_settings(username='F1 Fan')
     elif selected_option == "Registration":
             display_registration_page()
 
@@ -282,28 +289,6 @@ if __name__ == "__main__":
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ####To Finish Off the Sidebar with Trademark
 st.sidebar.markdown('''
 ---
@@ -314,8 +299,6 @@ Website developed for the \n Capstone Project Course
 
 
 st.sidebar.markdown("Social Media Links")
-# st.sidebar.markdown('<a href="https://twitter.com/AiTHLETS" target="_blank"><img src="https://img.freepik.com/vetores-gratis/novo-design-de-icone-x-do-logotipo-do-twitter-em-2023_1017-45418.jpg?size=338&ext=jpg&ga=GA1.1.1412446893.1704585600&semt=ais" height="30" width="30" style="border-radius: 50%;"></a>', unsafe_allow_html=True)   
-# st.sidebar.markdown('<a href="https://www.instagram.com/f1_aithletes/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" height="30" width="30"></a>', unsafe_allow_html=True)
 
 
 st.sidebar.markdown('<a href="https://twitter.com/AiTHLETS" target="_blank"><img src="https://img.freepik.com/vetores-gratis/novo-design-de-icone-x-do-logotipo-do-twitter-em-2023_1017-45418.jpg?size=338&ext=jpg&ga=GA1.1.1412446893.1704585600&semt=ais" height="30" width="30" style="border-radius: 50%;"></a >'
