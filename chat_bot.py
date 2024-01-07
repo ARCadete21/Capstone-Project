@@ -9,7 +9,7 @@ from GetAllData import vector_store
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
-
+from ChatbotFunctions import tools_custom
 
 # [i]                                                                                            #
 # [i] OpenAI API                                                                                 #
@@ -28,10 +28,11 @@ class GPT_Helper:
         self.messages = []
         self.model = model
         self.tools = tools
+        self.system_behavior = system_behavior
 
         self.vectorStore = vector_store
         self.BufferMemory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-        self.llm = ChatOpenAI(temperature=0.2)
+        self.llm = ChatOpenAI(temperature=0.2)#, tools=self.tools)
 
         if system_behavior:
             self.messages.append({
@@ -47,6 +48,7 @@ class GPT_Helper:
             model=self.model,
             messages=self.messages,
             temperature=temperature,
+            tools=self.tools
         )
 
         self.messages.append(
@@ -62,7 +64,7 @@ class GPT_Helper:
         self.messages.append({"role": "user", "content": prompt})
 
         crc = ConversationalRetrievalChain.from_llm(self.llm, retriever=self.vectorStore.vectorstore.as_retriever(),
-                                                    memory=self.BufferMemory, )
+                                                    memory=self.BufferMemory )
 
         prompt_result = crc({'question': prompt, 'chat_history': self.messages})
         answer = prompt_result['answer']
@@ -86,7 +88,8 @@ class F1ChatBot:
 
         self.engine = GPT_Helper(
             OPENAI_API_KEY=local_settings.OPENAI_API_KEY,
-            system_behavior=system_behavior
+            system_behavior=system_behavior,
+            tools= tools_custom
         )
 
     def generate_response(self, message: str):
@@ -101,7 +104,8 @@ class F1ChatBot:
     def reset(self):
         self.engine = GPT_Helper(
             OPENAI_API_KEY=local_settings.OPENAI_API_KEY,
-            system_behavior=self.system_behavior
+            system_behavior=self.system_behavior,
+            tools=tools_custom
         )
 
     @property

@@ -258,7 +258,7 @@ def plot_driver_standings_by_year(year):
     show(fig)
 
 
-from langchain.tools import WikipediaQueryRun
+from langchain_community.tools import WikipediaQueryRun
 from langchain_community.utilities import WikipediaAPIWrapper
 
 # Might use load_tools instead
@@ -362,6 +362,335 @@ def optimize_team(current_round, num_previous_race=1, max_capacity=100, drivers_
 
     return best_value, best_team
 
+### Prediction model all functions
+# DATA TYPES
+def datatype_distinction(data):
+    '''
+    Distinguishes between the numerical and categorical columns in a DataFrame.
+
+    Parameters:
+    -----------
+    data : pandas.DataFrame
+        The input DataFrame.
+
+    Returns:
+    --------
+    numerical : pandas.DataFrame
+        DataFrame containing only numerical columns.
+
+    categorical : pandas.DataFrame
+        DataFrame containing only categorical columns.
+    '''
+    # Select numerical columns using select_dtypes with np.number
+    numerical = data.select_dtypes(include=np.number).copy()
+
+    # Select categorical columns by excluding numerical types
+    categorical = data.select_dtypes(exclude=np.number).copy()
+
+    return numerical, categorical
+
+
+# DATA TRANSFORMATION
+def transformation(technique, data, column_transformer=False):
+    '''
+    Applies the specified transformation technique to the DataFrame.
+
+    Parameters:
+    -----------
+    technique : object
+        The transformation technique (e.g., from Scikit-learn) to be applied.
+
+    data : pandas.DataFrame
+        The input DataFrame to be transformed.
+
+    column_transformer : bool, optional (default=False)
+        Flag to indicate if a column transformer is used for custom column names.
+
+    Returns:
+    --------
+    data_transformed : pandas.DataFrame
+        Transformed DataFrame.
+
+    Notes:
+    ------
+    - If column_transformer is False, the columns in the transformed DataFrame
+      will retain the original column names.
+    - If column_transformer is True, the method assumes that technique has a
+      get_feature_names_out() method and uses it to get feature names for the
+      transformed data, otherwise retains the original column names.
+    '''
+    # Apply the specified transformation technique to the data
+    data_transformed = technique.transform(data)
+
+    # Create a DataFrame from the transformed data
+    data_transformed = pd.DataFrame(
+        data_transformed,
+        index=data.index,
+        columns=technique.get_feature_names_out() if column_transformer else data.columns
+    )
+
+    return data_transformed
+
+
+def data_transform(technique, X_train, X_val=None, column_transformer=False):
+    '''
+    Fits a data transformation technique on the training data and applies the transformation
+    to both the training and validation data.
+
+    Parameters:
+    -----------
+    technique : object
+        The data transformation technique (e.g., from Scikit-learn) to be applied.
+
+    X_train : pandas.DataFrame or array-like
+        The training data to fit the transformation technique and transform.
+
+    X_val : pandas.DataFrame or array-like, optional (default=None)
+        The validation data to be transformed.
+
+    column_transformer : bool, optional (default=False)
+        Flag to indicate if a column transformer is used for custom column names.
+
+    Returns:
+    --------
+    X_train_transformed : pandas.DataFrame
+        Transformed training data.
+
+    X_val_transformed : pandas.DataFrame or None
+        Transformed validation data. None if X_val is None.
+
+    Notes:
+    ------
+    - Fits the transformation technique on the training data (X_train).
+    - Applies the fitted transformation to X_train and optionally to X_val if provided.
+    '''
+    # Fit the transformation technique on the training data
+    technique.fit(X_train)
+
+    # Apply transformation to the training data
+    X_train_transformed = transformation(technique, X_train, column_transformer)
+
+    # Apply transformation to the validation data if provided
+    X_val_transformed = None
+    if X_val is not None:
+        X_val_transformed = transformation(technique, X_val, column_transformer)
+
+    return X_train_transformed, X_val_transformed
+
+# Because this is panel data so I will split each country_Region's data
+def train_test_split(data):
+    # size = int(len(data)*0.8)
+    # for train data will be collected from each country's data which index is from 0-size (80%)
+    x_train = data.drop(columns=['positionOrder']).iloc[0:-1]
+    # for test data will be collected from each country's  data which index is from size to the end (20%)
+    x_test = data.drop(columns=['positionOrder']).iloc[-1:]
+    y_train = data['positionOrder'].iloc[0:-1]
+    y_test = data['positionOrder'].iloc[-1:]
+    return x_train, x_test, y_train, y_test
+
+
+# Code Source: https://machinelearningmastery.com/multivariate-time-series-forecasting-lstms-keras/
+# convert series to supervised learning
+def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
+    n_vars = 1 if type(data) is list else data.shape[1]
+    df = pd.DataFrame(data)
+    cols, names = list(), list()
+    # input sequence (t-n, ... t-1)
+    for i in range(n_in-1, -1, -1):
+        cols.append(df.shift(i))
+        names += [('var%d(t-%d)' % (j+1, i)) for j in range(n_vars)]
+    # forecast sequence (t, t+1, ... t+n)
+    # for i in range(0, n_out):
+    #     cols.append(df.shift(-i))
+    #     if i == 0:
+    #         names += [('var%d(t)' % (j+1)) for j in range(n_vars)]
+    #     else:
+    #         names += [('var%d(t+%d)' % (j+1, i)) for j in range(n_vars)]
+    # put it all together
+    agg = pd.concat(cols, axis=1)
+    agg.columns = names
+    # drop rows with NaN values
+    if dropnan:
+        agg.dropna(inplace=True)
+    return agg
+
+
+# create the reshape function
+def reshape_data(train,test):
+    #Frame as supervised learning and drop all time t columns except
+    reframed_train = series_to_supervised(train, 1, 1)
+    reframed_test = series_to_supervised(test, 1, 1)
+    # split into train and test sets
+    train= reframed_train.values
+    test=reframed_test.values
+    # split into input and outputs
+    train_X, y_train = train[:, :-1], train[:, -1]
+    test_X, y_test = test[:, :-1], test[:, -1]
+    # reshape input to be 3D [samples, timesteps, features]
+    x_train = train_X.reshape((train_X.shape[0], 1, train_X.shape[1]))
+    x_test = test_X.reshape((test_X.shape[0], 1, test_X.shape[1]))
+    return x_train,x_test,y_train,y_test
+
+
+import os
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import keras
+import re
+
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder, LabelEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import KNNImputer
+from sklearn.metrics import mean_absolute_error, r2_score, classification_report
+
+from keras.models import Sequential
+from keras.layers import LSTM, Dense, Dropout
+
+import warnings
+warnings.filterwarnings('ignore')
+
+def predictive_model(round_to_predict):
+    # filter data
+    train = pd.read_pickle('data_to_model.pkl')
+
+    train_filtered = train[((train['round'] <= round_to_predict) & (train['year'] == 2023)) | (train['year'] == 2022)]
+
+    # normalized the data
+    train_scaled = data_transform(MinMaxScaler(), train_filtered.drop(columns=['positionOrder', 'constructorRef', 'firstDriver', 'year', 'round']))[0]
+
+    # impute missing values
+    imputer = KNNImputer(n_neighbors=5)
+    train_scaled = data_transform(imputer, train_scaled)[0]
+
+    # create label column
+    train_copy = train_filtered.copy()
+    train_copy[train_scaled.columns] = np.array(train_scaled)
+    train_copy['driver'] = list(zip(train_copy.constructorRef, train_copy.firstDriver))
+
+    # set index
+    train_copy = train_copy.set_index(['constructorRef', 'firstDriver', 'year', 'round'])
+
+    # get list of driver
+    driver = list(set(train_copy.driver))
+
+    # loop each country_Region and split the data into train and test data
+    X_train = []
+    X_test = []
+    Y_train = []
+    Y_test = []
+    for i in range(0,len(driver)):
+        data = train_copy[train_copy['driver'] == driver[i]]
+        # applied the function I created above
+        x_train, x_test, y_train, y_test = train_test_split(data)
+        X_train.append(x_train)
+        X_test.append(x_test)
+        Y_train.append(y_train)
+        Y_test.append(y_test)
+
+
+    # concatenate each train dataset in X_train list and Y_train list respectively
+    X_train = pd.concat(X_train)
+    Y_train = pd.DataFrame(pd.concat(Y_train))
+
+    # concatenate each test dataset in X_test list and Y_test list respectively
+    X_test = pd.concat(X_test)
+    Y_test = pd.DataFrame(pd.concat(Y_test))
+
+    # encode the driver column
+    encoder = LabelEncoder()
+
+    #combine X train and Y train as train data
+    train_data = pd.DataFrame()
+    train_data[X_train.columns] = X_train
+    train_data[Y_train.columns] = Y_train
+    train_data['driver'] = encoder.fit_transform(train_data['driver'].astype(str)).astype(float)
+
+    #combine X test and Y test as test data
+    test_data = pd.DataFrame()
+    test_data[X_test.columns] = X_test
+    test_data[Y_test.columns] = Y_test
+    test_data['driver'] = encoder.fit_transform(test_data['driver'].astype(str)).astype(float)
+
+    # using the function to obtian reshaped x_train,x_test,y_train,y_test
+    x_train, x_test, y_train, y_test = reshape_data(train_data, test_data)
+
+    # correct the data type
+    x_train = np.asarray(x_train).astype(np.float32)
+    y_train = np.asarray(y_train).astype(np.float32)
+    x_test = np.asarray(x_test).astype(np.float32)
+    y_test = np.asarray(y_test).astype(np.float32)
+
+    # design network for confirmed cases data
+    model = None
+    model = Sequential()
+    model.add(LSTM(40, activation='relu', input_shape=(x_train.shape[1], x_train.shape[2])))
+    model.add(Dropout(0.2))
+    model.add(Dense(30, activation='relu'))
+
+    model.add(Dense(1))
+    model.compile(loss='mae', optimizer='adam')
+    # fit network
+    history = model.fit(x_train, y_train, epochs=100, batch_size=50, verbose=0, shuffle=False)
+
+    # make a prediction
+    y_test_pred = model.predict(x_test)
+
+    # create evaluation dataframe
+    evaluation = pd.DataFrame()
+    evaluation[['constructorRef', 'firstDriver', 'year', 'round']] = X_test.reset_index()[
+        ['constructorRef', 'firstDriver', 'year', 'round']]
+    evaluation['prediction'] = [i[0] for i in y_test_pred]
+    # evaluation['position'] = y_test
+
+    # rank the 'prediction' values within each 'round'
+    evaluation['positionPrediction'] = evaluation.groupby('round')['prediction'].rank(ascending=False)
+
+    # transform ranks to positions (20 to 1)
+    evaluation['positionPrediction'] = 20 - evaluation['positionPrediction'] + 1
+
+    drivers_evaluation_map = {
+        'Max Verstappen': ['red_bull', 1],
+        'Sergio Perez': ['red_bull', 0],
+        'Lewis Hamilton': ['mercedes', 1],
+        'George Russell': ['mercedes', 0],
+        'Charles Leclerc': ['ferrari', 1],
+        'Carlos Sainz': ['ferrari', 0],
+        'Lando Norris': ['mclaren', 1],
+        'Oscar Piastri': ['mclaren', 0],
+        'Esteban Ocon': ['alpine', 1],
+        'Pierre Gasly': ['alpine', 0],
+        'Lance Stroll': ['aston_martin', 1],
+        'Fernando Alonso': ['aston_martin', 0],
+        'Valterri Bottas': ['alfa', 1],
+        'Guanyu Zhou': ['alfa', 0],
+        'Yuki Tsunoda': ['alphatauri', 1],
+        'Nyck De Vries': ['alphatauri', 0],
+        'Kevin Magnussen': ['haas', 1],
+        'Nico Hulkenberg': ['haas', 0],
+        'Alexander Albon': ['williams', 1],
+        'Logan Sargeant': ['williams', 0]
+    }
+
+    def map_drivers(row):
+        constructor = row['constructorRef']
+        first_driver = row['firstDriver']
+        for driver, values in drivers_evaluation_map.items():
+            if values[0] == constructor and values[1] == first_driver:
+                return driver
+        return 'Unknown'  # If no match is found
+
+    # Applying the function to create the 'driver' column
+    evaluation['driver'] = evaluation.apply(map_drivers, axis=1)
+
+    # Drop unnecessary columns
+    evaluation.drop(columns=['constructorRef', 'firstDriver', 'prediction', 'year', 'round'], inplace=True)
+
+    # Sort by positionPrediction
+    evaluation.sort_values(by='positionPrediction', inplace=True)
+    return evaluation
+
+#####
 
 #######################################################################################################################
 tools_custom = [
@@ -415,5 +744,12 @@ tools_custom = [
         'function': optimize_team,
         'parameters': ['current_round', 'num_previous_race', 'max_capacity', 'drivers_defined', 'constructors_defined'],
         'dependencies': ['pandas']
+    },
+    {
+        'name': 'predictive_model',
+        'description': 'Builds and evaluates a predictive model for F1 race positions. Returns a DataFrame.',
+        'function': predictive_model,
+        'parameters': ['round_to_predict'],
+        'dependencies': ['pandas', 'numpy', 'scikit-learn', 'tensorflow']
     }
 ]

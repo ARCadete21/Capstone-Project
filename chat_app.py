@@ -73,7 +73,7 @@ def display_assistant_msg(message: str, animated=True):
     """
 
     if animated:
-        with st.chat_message("assistant", avatar="🤖🏎️"):
+        with st.chat_message("assistant", avatar="🏎️"):
             message_placeholder = st.empty()
 
             # Simulate stream of response with milliseconds delay
