@@ -9,7 +9,7 @@ import random
 import time
 import streamlit as st
 
-from chat_bot import PizzaChatBot
+from chat_bot import F1ChatBot
 from util import local_settings
 from prompt_list import prompts
 
@@ -29,10 +29,10 @@ def initialize() -> None:
             value=prompts[0]["prompt"]
         )
 
-    st.sidebar.title("🤖 🍕")
+    st.sidebar.title("🤖🏎️ F1 ChatBot")
 
     if "chatbot" not in st.session_state:
-        st.session_state.chatbot = PizzaChatBot(st.session_state.system_behavior)
+        st.session_state.chatbot = F1ChatBot(st.session_state.system_behavior)
 
     with st.sidebar:
         st.markdown(
@@ -73,7 +73,7 @@ def display_assistant_msg(message: str, animated=True):
     """
 
     if animated:
-        with st.chat_message("assistant", avatar="🤖"):
+        with st.chat_message("assistant", avatar="🏎️"):
             message_placeholder = st.empty()
 
             # Simulate stream of response with milliseconds delay
@@ -87,7 +87,7 @@ def display_assistant_msg(message: str, animated=True):
 
             message_placeholder.markdown(full_response)
     else:
-        with st.chat_message("assistant", avatar="🤖"):
+        with st.chat_message("assistant", avatar="🤖🏎️"):
             st.markdown(message)
 
 
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     with st.sidebar:
         with st.expander("Information"):
             if local_settings.OPENAI_API_KEY:
-                st.write(f"🔑 Key loaded: { local_settings.OPENAI_API_KEY[0:6]}...")
+                st.write(f"🔑 Key loaded...")
 
             st.text("💬 MEMORY")
             st.write(st.session_state.chatbot.memory)
