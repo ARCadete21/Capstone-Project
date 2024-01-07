@@ -18,15 +18,16 @@
 <a name="proj_desc"></a>
 ## Project Description
 
-Our project comes in the sense of a university course - Capstone Project - on our final year of a Bachelor's Degree in Data Science at Nova IMS.
+Our project comes in the sense of a university course - Capstone Project - in our final year of a Bachelor's Degree in Data Science at Nova IMS.
 
-Our fictional company, Doc-IT-Right,  is part of the consultancy sector. However, it falls under the health sector, as it intends to provide a solution for the scheduling and management of appointments in different medical specialties of a medical clinic. 
+Our company, AiTHLETES,  is designed to get data insights from the F1 world. The major objective of our company is to help F1 fans all over the globe to get to know better the main personalities in the grid and everything that revolves around them.  
 
-Our project aims to develop an interface that allows the management of a medical office, including a website with information about the company (https://docitrightcp.wixsite.com/doc-it-right) and also a chatbot that will directly interact with the patient, clarifying all of its doubts. In addition, a predictive model was also developed to predict which appointments were more likely to be missed by patients, having a final accuracy of 80% (as well as the same value for the weighted f1-score); therefore, empowering clinics to better manage their schedules (possibly contacting the patient as a reminder of the appointment or confirming if it is still coming).
+Our project aims to develop an interface specialized in the F1 history - F1 Pilot - and as well as being able to predict the drivers' standings with each grand prix data and as well as help any user with their F1 fantasy, able to adapt to any restrictions existing in the fantasy rules.
 
-Our mission is to guarantee that clinics can deliver the best service to their patients, in the most effective way possible. This software will open up the possibility of increasing the quality of medical service with less or equal resources. By effectively organizing data, doctors and other collaborators can dedicate their time to other more complex and important actions, that will benefit patients in a great way, instead of spending time with routine, basic and repetitive actions that can be performed by this software.
+In addition, a website was also developed, where our F1 Pilot is inserted, users can find several pages where they can interact with everyone and even with the developers of this project; a Data Hub where up-to-date data is powerfully displayed; a comment section where everyone can give suggestions via email to the marketing department.
 
-This way, and in a country where there is such a great qualified labour but not so much quantity of it, we aim to get the best out of the available workforce, challenging them into new, more rewarding tasks, and manage them into success and contentment of patients that can, in this way, have better medical care and see their doubts quickly resolved.
+This way, in the growing fanbase of the sport we are looking to spread more knowledge about everything that is going on weekly in the track! With the power of artificial intelligence, we can be side by side with any question our users might have every single day.
+
 
 <a name="main_tech"></a>
 ### - What main technologies were used in the development of this project?
