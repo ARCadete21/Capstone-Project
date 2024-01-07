@@ -945,7 +945,7 @@ elif option_chosen == 'Grand Prix Information':
     selected_gp_info = merged_drivers.loc[merged_drivers['gp_name'] == selected_gp,
                                         ['gp_name', 'gp_date', 'track_name', 'location_y', 'country_y', 'time']]
    
-    selected_gp_info = pd.merge(selected_gp_info, n2k[['track', 
+    selected_gp_info = pd.merge(selected_gp_info, n2k[['gp_name', 
                                                        'traction', 
                                                        'track_evolution',
                                                        'braking',
@@ -964,51 +964,76 @@ elif option_chosen == 'Grand Prix Information':
                                                        'circuit_length',
                                                        'turns',
                                                        'elevation_change',
-                                                       'top_speed']], on='track')
+                                                       'top_speed']], on='gp_name', how='left')
     
     selected_gp_info = selected_gp_info.groupby(['gp_name', 'gp_date']).agg({
         'track_name': 'first',
         'location_y': 'first',
         'country_y': 'first',
         'time': 'first',
-    }).reset_index()
+        'traction': 'first', 
+        'track_evolution':'first',
+        'braking':'first',
+        'asphalt_grip':'first',
+        'lateral':'first',
+        'asphalt_abrasion':'first',
+        'tyre_stress':'first',
+        'downforce':'first',
+        'c1_compound':'first',
+        'c2_compound':'first',
+        'c3_compound':'first',
+        'c4_compound':'first',
+        'c5_compound':'first',
+        'laps':'first',
+        'race_dist':'first',
+        'circuit_length':'first',
+        'turns':'first',
+        'elevation_change':'first',
+        'top_speed':'first'}).reset_index()
 
 
     #initializing columns
     col1, col2 = st.columns(2)
- 
-    
-    #Gp date
-    gp_date = selected_gp_info.loc[selected_gp_info['gp_name'] == selected_gp, 'gp_date'].iloc[0]
-
-    # Assuming gp_date is a Pandas Timestamp object
-    gp_date_str = gp_date.strftime('%d-%m-%Y')  # Convert Timestamp to string
-
-    # Display the date using metric
-    col1.metric(f"{selected_gp}'s Date", gp_date_str)
-
-
-    #Gp Time
-    gp_hours = selected_gp_info.loc[selected_gp_info['gp_name'] == selected_gp, 'time'].iloc[0]
-    # Assuming gp_date is a Pandas Timestamp object
-
-    # Display the date using metric
-    col1.metric(f"{selected_gp}'s Start Time (GMT)", gp_hours)
 
     #Track Information
     track_name_metric = selected_gp_info['track_name'].iloc[0]
     # Display the track name using metric
-    col2.metric("Venue Name:", track_name_metric)
+    col1.metric("Venue Name:", track_name_metric)
 
     #Location Information
     track_cnt_metric = selected_gp_info['country_y'].iloc[0]
     # Display the track name using metric
-    col2.metric("Country", track_cnt_metric)
+    col1.metric("Country", track_cnt_metric)
     #Track Information
     track_loc_metric = selected_gp_info['location_y'].iloc[0]
     # Display the track name using metric
-    col2.metric("City", track_loc_metric)
+    col1.metric("City", track_loc_metric)
 
+
+
+    #Gp date
+    gp_date = selected_gp_info.loc[selected_gp_info['gp_name'] == selected_gp, 'gp_date'].iloc[0]
+
+    gp_date_str = gp_date.strftime('%d-%m-%Y')  # Convert Timestamp to string
+
+    # Display the date using metric
+    col2.metric(f"{selected_gp}'s Date", gp_date_str)
+
+    #Gp Time
+    gp_hours = selected_gp_info.loc[selected_gp_info['gp_name'] == selected_gp, 'time'].iloc[0]
+
+    # Display the date using metric
+    col2.metric(f"{selected_gp}'s Start Time (GMT)", gp_hours)
+
+    #Displaying track length
+    gp_length = selected_gp_info.loc[selected_gp_info['gp_name'] == selected_gp, 'circuit_length'].iloc[0]
+    col2.metric(f"{track_name_metric}'s Track Length", value=f"{gp_length} km")
+
+    #Laps
+    gp_laps = selected_gp_info.loc[selected_gp_info['gp_name'] == selected_gp, 'laps'].iloc[0]
+
+    # Display the date using metric
+    col2.metric(f"{selected_gp}'s Total laps", value=f"{gp_laps}")
 
     # Display selected Grand Prix information
     if not selected_gp_info.empty:
@@ -1026,8 +1051,61 @@ elif option_chosen == 'Grand Prix Information':
     else:
         st.warning("Please select a Grand Prix from the dropdown.")
 
+    #Creating more columns
+    col3, col4, col5 = st.columns(3)
+
+    # Define the compound columns
+    compound_columns = ['c1_compound', 'c2_compound', 'c3_compound', 'c4_compound', 'c5_compound']
+
+    # Initialize variables to store softest, medium, and hardest compounds
+    soft_compound = None
+    medium_compound = None
+    hard_compound = None
+
+    # Iterate through the compound columns to find the first occurrence of each type
+    for compound_column in compound_columns:
+        if selected_gp_info[compound_column].iloc[0] == 1:
+            if soft_compound is None:
+                soft_compound = compound_column
+            elif medium_compound is None:
+                medium_compound = compound_column
+            elif hard_compound is None:
+                hard_compound = compound_column
+            else:
+                break  # Exit the loop after finding soft, medium, and hard compounds
+
+    # Display the tyre information with capitalized names
+    col3.metric("Soft Tyre", soft_compound.replace('_compound', ' Compound').capitalize() if soft_compound else "")
+    col3.metric("Medium Tyre", medium_compound.replace('_compound', ' Compound').capitalize() if medium_compound else "")
+    col3.metric("Hard Tyre", hard_compound.replace('_compound', ' Compound').capitalize() if hard_compound else "")
+    
+    #Characteristics of the circuit
+    #Laps
+    gp_ts = selected_gp_info.loc[selected_gp_info['gp_name'] == selected_gp, 'top_speed'].iloc[0]
+
+    # Display the date using metric
+    col4.metric("Top Speed", value=f"{gp_ts} km/h")
+
+    #Turns
+    gp_turns = selected_gp_info.loc[selected_gp_info['gp_name'] == selected_gp, 'turns'].iloc[0]
+
+    # Display the date using metric
+    col4.metric("Turns", value=f"{gp_turns}")
 
 
+
+    ##########
+    #race Dist
+    gp_dist = selected_gp_info.loc[selected_gp_info['gp_name'] == selected_gp, 'race_dist'].iloc[0]
+
+    # Display the date using metric
+    col5.metric(f"{selected_gp}'s Total Length", value=f"{gp_dist} km")
+
+    #Elevation Change
+    gp_elev = selected_gp_info.loc[selected_gp_info['gp_name'] == selected_gp, 'elevation_change'].iloc[0]
+
+    # Display the date using metric
+    col5.metric(f"{track_name_metric}'s elevation change ", value=f"{gp_elev} m")
 
 
 
