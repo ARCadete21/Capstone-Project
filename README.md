@@ -84,7 +84,7 @@ Our chatbot is capable of handling different formats of inputs. However, in orde
 
 The results of the predictive model for each appointment can be verified in the event scheduled in the clinic's calendar. Furthermore, they are also stored at Doc-IT-Right's database (along with the patient's personal information and the remaining appointment data).
 
-Afterwards, you can have fun interacting with our Dr. Chatbot.
+Afterwards, you can have fun interacting on our website alongside our F1 Pilot.
 
 <a name="credits"></a>
 ## 
