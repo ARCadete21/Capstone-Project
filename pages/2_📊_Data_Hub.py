@@ -773,35 +773,6 @@ elif option_chosen == 'Constructor Statistics':
         # Display the chart in the Streamlit app
         col4.plotly_chart(fig)
 
-        winner_counts = selected_year_data[selected_year_data['positionOrder'] == 1].groupby('driver_name').size()
-
-        gp_winners = winner_counts.nlargest(5)
-
-        # Create a horizontal bar chart using plotly express
-        fig = px.bar(gp_winners, x=gp_winners.values, 
-                     y=gp_winners.index, 
-                     orientation='h', 
-                     title=f"Top 5 Drivers with more Wins in {selected_year}")
-
-        # Display the chart using st.plotly_chart
-        col1.plotly_chart(fig)
-
-
-        # Drivers with most top 3
-        # Count the occurrences of each driver in the top 3 positions
-        top3_counts = selected_year_data[selected_year_data['positionOrder'] <= 3].groupby('driver_name').size()
-
-        top3_drivers = top3_counts.nlargest(5)
-
-        # Create a horizontal bar chart using plotly express
-        fig = px.bar(top3_drivers, x=top3_drivers.values, 
-                     y=top3_drivers.index, 
-                     orientation='h', 
-                     title=f"Top 5 Drivers with more Podiums in {selected_year}")
-
-        # Display the chart using st.plotly_chart
-        col2.plotly_chart(fig)
-
 
 
     else:
@@ -819,32 +790,10 @@ elif option_chosen == 'Constructor Statistics':
         
         # Column 2
         # #Constructor Information
-        # #Driver's Nationality
-        # selected_driver_nationality = selected_year_data.loc[selected_year_data['driver_name'] == selected_driver, 'nationality_x'].iloc[0]
-        # selected_driver_emoji = driver_nations.get(selected_driver_nationality, '')
-        # col2.metric("Driver Nationality", f"{selected_driver_nationality} \n {selected_driver_emoji}")
-
-        # #Driver's Age
-        # selected_driver_age = selected_year_data.loc[(selected_year_data['driver_name'] == selected_driver) & (selected_year_data['year'] == selected_year), 'age'].iloc[0]
-        # col2.metric(f"{selected_driver}'s Age", selected_driver_age)
-        # #DOB 
-        # date_birth = selected_year_data.loc[selected_year_data['driver_name'] == selected_driver, 'dob'].iloc[0]
-        # col2.metric(f"{selected_driver}'s Date of Birth", date_birth)
-
-        # # Professional Info :)
-        # # Driver's Team
-        # selected_driver_team = selected_year_data.loc[(selected_year_data['driver_name'] == selected_driver) & (selected_year_data['year'] == selected_year), 'team_name'].iloc[0]
-        # col2.metric(f"{selected_driver} drives for", selected_driver_team)
-        
-        # #Driver's No and Ref
-        # selected_driver_no = selected_year_data.loc[(selected_year_data['driver_name'] == selected_driver) & (selected_year_data['year'] == selected_year), 'number'].iloc[0]
-        # selected_driver_ref = selected_year_data.loc[selected_year_data['driver_name'] == selected_driver, 'code'].iloc[0]
-        # # Convert the tuple to a string
-        # driver_references = f"{selected_driver_ref}   | {selected_driver_no}"
-
-        # # Display the metric
-        # col2.metric(label="Driver references on the track", value=driver_references)
-
+        #Constructor's Origin Country
+        selected_const_nationality = selected_year_data.loc[selected_year_data['team_name'] == selected_constructor, 'nationality_y'].iloc[0]
+        selected_const_emoji = driver_nations.get(selected_const_nationality, '')
+        col2.metric("Driver Nationality", f"{selected_const_nationality} \n {selected_const_emoji}")
 
         # Column 3
         liveries = constructor_liveries.get(selected_constructor)
