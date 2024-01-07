@@ -1,16 +1,10 @@
-import fastf1 as ff1
-from fastf1 import plotting
-from fastf1 import utils
 import fastf1.legacy
 import fastf1 as ff1
+import fastf1.legacy
+import matplotlib as mpl
 import numpy as np
 from matplotlib import pyplot as plt
 from matplotlib.collections import LineCollection
-from matplotlib import cm
-import matplotlib.font_manager as fm
-import numpy as np
-import pandas as pd
-import matplotlib as mpl
 
 colormap = mpl.cm.plasma
 
@@ -177,7 +171,6 @@ def get_from_fastf1(year, gp, session):
     session.load()
 
 
-import pandas as pd
 import plotly.express as px
 from plotly.io import show
 
@@ -263,3 +256,164 @@ def plot_driver_standings_by_year(year):
     fig.update_layout(xaxis=dict(side='top'))           # x-axis on top
     fig.update_layout(margin=dict(l=0, r=0, b=0, t=0))  # Remove border margins
     show(fig)
+
+
+from langchain.tools import WikipediaQueryRun
+from langchain_community.utilities import WikipediaAPIWrapper
+
+# Might use load_tools instead
+def access_wikipedia_api(subject):
+    """
+    Access the Wikipedia API to get a summary of a given subject given by the user in their query.
+
+    Parameters
+    ----------
+    subject : str
+        The subject of the query.
+
+    Returns
+    -------
+    summary : str
+        The summary of the subject.
+    """
+    wikipedia = WikipediaQueryRun(api_wrapper=WikipediaAPIWrapper())
+    summary = wikipedia.run(subject)
+    return summary
+
+
+import pandas as pd
+from itertools import combinations
+
+
+def create_combinations(data, i, defined_keys=None):
+    available_keys = data[-1].keys()
+    remaining_keys = available_keys - (defined_keys or set())
+    defined_keys_list = list(defined_keys) if defined_keys else []
+
+    data_combinations = combinations(remaining_keys, i - len(defined_keys_list))
+    data_combinations = [defined_keys_list + list(data_combination) for data_combination in data_combinations]
+
+    return data_combinations
+
+
+def optimize_team(current_round, num_previous_race=1, max_capacity=100, drivers_defined=None, constructors_defined=None):
+    """
+    Gives the best possible combination of drivers and constructors.
+
+    Parameters
+    ----------
+    current_round : int
+        The current round of the season.
+
+    num_previous_race : int, optional
+        How many races to consider (at least 1). The default is 1. If 0 will give error.
+
+    max_capacity : int, optional
+        The maximum capacity (budget) of the team. The default is 100.
+
+    drivers_defined : list, optional
+        A list of drivers to be included in the team. The default is None.
+
+    constructors_defined : list, optional
+        A list of constructors to be included in the team. The default is None.
+    """
+    # Import data from pickle files
+    drivers_dict = pd.read_pickle('drivers_dict.pkl')
+    constructors_dict = pd.read_pickle('constructors_dict.pkl')
+    # Initialize variables
+    best_value = 0
+    best_team = None
+
+    # Collect data from previous races
+    drivers_data = [drivers_dict[i] for i in range(current_round - num_previous_race + 1, current_round + 1)]
+    constructors_data = [constructors_dict[i] for i in range(current_round - num_previous_race + 1, current_round + 1)]
+
+    # Generate combinations of 5 drivers
+    driver_combinations = create_combinations(drivers_data, 5, drivers_defined)
+
+    # Iterate through all combinations
+    for drivers_combo in driver_combinations:
+        # Generate combinations of 2 constructors for each driver combination iteration
+        constructor_combinations = create_combinations(constructors_data, 2, constructors_defined)
+
+        for constructors_combo in constructor_combinations:
+            # Calculate total weight for the combination
+            total_weight = sum(drivers_data[-1][driver][0] for driver in drivers_combo) + sum(constructors_data[-1][constructor][0] for constructor in constructors_combo)
+
+            # Check if within capacity limit
+            if total_weight > max_capacity:
+                continue
+
+            # Initialize total value
+            total_value = 0
+
+            for i in range(num_previous_race):
+                # Calculate mean value for each driver and constructor
+                driver_value_mean = sum(drivers_data[i][driver][1] for driver in drivers_combo) / num_previous_race
+                constructor_value_mean = sum(constructors_data[i][constructor][1] for constructor in constructors_combo) / num_previous_race
+
+                # Calculate total value for the combination
+                total_value += driver_value_mean + constructor_value_mean
+
+            # Update best team
+            if total_value > best_value:
+                best_value = total_value
+                best_team = (list(drivers_combo), list(constructors_combo))
+
+    return best_value, best_team
+
+
+#######################################################################################################################
+tools_custom = [
+    {
+        'name': 'draw_f1_circuit',
+        'description': 'Draws an F1 circuit map with corner information. Returns a graph.',
+        'function': draw_f1_circuit,
+        'parameters': ['circuit', 'year'],
+        'dependencies': ['fastf1', 'matplotlib', 'numpy']
+    },
+    {
+        'name': 'compare_track_dominance',
+        'description': 'Compares the track dominance between two F1 drivers. Returns a graph.',
+        'function': compare_track_dominance,
+        'parameters': ['race_name', 'driver_surname1', 'driver_surname2', 'year', 'session'],
+        'dependencies': ['fastf1', 'matplotlib', 'numpy', 'pandas']
+    },
+    {
+        'name': 'get_from_fastf1',
+        'description': 'Gathers data from FastF1 for a specific F1 session.',
+        'function': get_from_fastf1,
+        'parameters': ['year', 'gp', 'session'],
+        'dependencies': ['fastf1']
+    },
+    {
+        'name': 'plot_driver_standings_by_year',
+        'description': 'Plots the driver standings for a given F1 season using Ergast data. Caution with requests per '
+                       'hour. Returns a heatmap.',
+        'function': plot_driver_standings_by_year,
+        'parameters': ['year'],
+        'dependencies': ['plotly.express', 'plotly.io', 'fastf1.ergast']
+    },
+    {
+        'name': 'access_wikipedia_api',
+        'description': 'Accesses the Wikipedia API to get a summary of a given subject. Returns a JSON',
+        'function': access_wikipedia_api,
+        'parameters': ['subject'],
+        'dependencies': ['langchain.tools.WikipediaQueryRun', 'langchain_community.utilities.WikipediaAPIWrapper']
+    },
+    {
+        'name': 'create_combinations',
+        'description': 'Creates combinations of data based on specified keys.',
+        'function': create_combinations,
+        'parameters': ['data', 'i', 'defined_keys'],
+        'dependencies': ['pandas', 'itertools']
+    },
+    {
+        'name': 'optimize_team',
+        'description': "Optimizes a team's combination of drivers and constructors. Returns best driver combination "
+                       "and best constructor combination separately.",
+        'function': optimize_team,
+        'parameters': ['current_round', 'num_previous_race', 'max_capacity', 'drivers_defined', 'constructors_defined'],
+        'dependencies': ['pandas']
+    }
+]

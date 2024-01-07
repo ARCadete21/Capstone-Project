@@ -58,11 +58,11 @@ class GPT_Helper:
 
         return completion.choices[0].message.content
 
-    def get_completion(self, prompt, temperature=0):
+    def get_completion(self, prompt):
         self.messages.append({"role": "user", "content": prompt})
 
         crc = ConversationalRetrievalChain.from_llm(self.llm, retriever=self.vectorStore.vectorstore.as_retriever(),
-                                                    memory=self.BufferMemory,)
+                                                    memory=self.BufferMemory, )
 
         prompt_result = crc({'question': prompt, 'chat_history': self.messages})
         answer = prompt_result['answer']
@@ -70,8 +70,6 @@ class GPT_Helper:
         self.messages.append({"role": "assistant", "content": answer})
 
         return answer
-
-
 
 
 # [i]                                                                                            #

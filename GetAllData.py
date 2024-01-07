@@ -31,7 +31,7 @@ def preprocess_pdf_files_for_LLM(path: str):
     vectorstore = FAISS.from_texts(texts=chunks, embedding=embeddings)
     return vectorstore
 
-
+###################### MAIN ######################
 
 loader_pdfs = DirectoryLoader('C:\\Users\\marce\\OneDrive\\Documentos\\GitHub\\Capstone-Project\\DataFiltered2022_2023', show_progress=True, glob='**/*.pdf', loader_cls=PyPDFLoader)
 loader_csv = DirectoryLoader('C:\\Users\\marce\\OneDrive\\Documentos\\GitHub\\Capstone-Project\\DataFiltered2022_2023', show_progress=True, glob='**/*.csv', loader_cls=CSVLoader)
