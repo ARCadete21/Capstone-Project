@@ -1,5 +1,11 @@
 import streamlit as st
 import sqlite3
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from google.oauth2 import service_account
+from google.auth.transport.requests import Request
+import smtplib
+
 
 # Connect to SQLite database
 conn = sqlite3.connect('your_database_name.db')
@@ -17,6 +23,32 @@ def view_all_questions():
     c.execute('SELECT * FROM blogtable')
     data = c.fetchall()
     return data
+
+def send_email(name, question_title, question, qdate):
+    sender_email = "aithlets@gmail.com"  # Update with your Gmail email address
+    receiver_email = "aithlets@gmail.com"
+
+    subject = f"New Question from {name}"
+    body = f"Name: {name}\nQuestion Title: {question_title}\nQuestion: {question}\nDate: {qdate}"
+
+    # Set up the MIME
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = receiver_email
+    message['Subject'] = subject
+    message.attach(MIMEText(body, 'plain'))
+
+    # Log in using an App Password
+    app_password = 'hjbt ihzt tflw xdrr'  # Replace with the App Password you generated
+    with smtplib.SMTP('smtp.gmail.com', 587) as server:
+        server.starttls()
+        server.ehlo()
+
+        # Log in using App Password
+        server.login(sender_email, app_password)
+
+        # Send email
+        server.sendmail(sender_email, receiver_email, message.as_string())
 
 # Streamlit UI
 create_table()
@@ -38,7 +70,8 @@ qdate = st.date_input("Enter the current date:")
 if st.button("Add"):
     with conn:
         add_data(name, question_title, question, qdate)
-        st.write(f"Question: {question_title} saved")
+        send_email(name, question_title, question, qdate)
+        st.write(f"Question: {question_title} Saved and sent to your company email.")
 
 # Close the connection when done
 conn.close()
