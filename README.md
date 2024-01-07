@@ -31,9 +31,9 @@ This way, in the growing fanbase of the sport we are looking to spread more know
 
 <a name="main_tech"></a>
 ### - What main technologies were used in the development of this project?
-For this project, the main goal was to create an AI-powered Question Answer System which would engage with fictional customers - in our case patients of medical clinics. This would be the primary communication channel of our business - being able to offer services to customers (easily managing appointments, answering patient's medical specialities, as well as their medication doubts; giving the predictions of which appointments are more likely to be missed to clinics) through a conversational app. 
+For this project, the main goal was to create an AI-powered Conversational System that would engage with potential F1 fans. This would be the primary communication channel of our business - being able to assist our users (getting to know more facts about historical data, landing some insights about the last race, as well as their fantasy team changing possibilities; and mostly, help them to have a better understanding of future possible race winners with the predictive model implemented) through a conversational app. 
 
-With this project, we were able to explore more in-depth how to make use of LLM models, from OpenAI, in different problems (with Python being the chosen programming language) - through the development of a chatbot that is able to perform appointment scheduling actions, solve patient doubts and predict which appointments are more likely to be missed. Furthermore, the team learned how to create an application using Streamlit and a website on WIX.
+With this project, we were able to explore more in-depth how to make use of LLM models, from OpenAI, in different problems (with Python being the chosen programming language) - through the development of a chatbot that can perform smooth facts and doubts conversations, predict which drivers are more likely to win the following races as well as who might be the best fit for their fantasy team. Furthermore, the team learned how to create an application using Streamlit.
 
 <a name="main_chal"></a>
 ### - What were the main challenges faced? 
