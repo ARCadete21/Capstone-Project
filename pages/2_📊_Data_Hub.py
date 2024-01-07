@@ -264,6 +264,7 @@ with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 #### Importing the datasets from our github repo that will be used to create the visualizations ###
+n2k = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Project/daniel.everything/n2k_data.csv")
 #Data that was used for the modelling
 new_era = pd.read_csv("https://raw.githubusercontent.com/ARCadete21/Capstone-Project/main/data/data2022_2023.csv") #for general use
 
@@ -943,6 +944,27 @@ elif option_chosen == 'Grand Prix Information':
     # Use loc to select columns related to the selected Grand Prix
     selected_gp_info = merged_drivers.loc[merged_drivers['gp_name'] == selected_gp,
                                         ['gp_name', 'gp_date', 'track_name', 'location_y', 'country_y', 'time']]
+   
+    selected_gp_info = pd.merge(selected_gp_info, n2k[['track', 
+                                                       'traction', 
+                                                       'track_evolution',
+                                                       'braking',
+                                                       'asphalt_grip',
+                                                       'lateral',
+                                                       'asphalt_abrasion',
+                                                       'tyre_stress',
+                                                       'downforce',
+                                                       'c1_compound',
+                                                       'c2_compound',
+                                                       'c3_compound',
+                                                       'c4_compound',
+                                                       'c5_compound',
+                                                       'laps',
+                                                       'race_dist',
+                                                       'circuit_length',
+                                                       'turns',
+                                                       'elevation_change',
+                                                       'top_speed']], on='track')
     
     selected_gp_info = selected_gp_info.groupby(['gp_name', 'gp_date']).agg({
         'track_name': 'first',
