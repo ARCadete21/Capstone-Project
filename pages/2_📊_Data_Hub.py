@@ -224,6 +224,8 @@ constructor_liveries = {
     'Ferrari': 'https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2023/ferrari.png.transform/6col/image.png',
     'Alfa Romeo': 'https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2023/alfa-romeo.png.transform/6col/image.png'
 }
+
+
 ######## Setting the overall page configuration ########
 st.set_page_config(
     layout='wide',
@@ -773,7 +775,22 @@ elif option_chosen == 'Constructor Statistics':
         # Display the chart in the Streamlit app
         col4.plotly_chart(fig)
 
+        #Point variation per team per week
 
+        # Group by 'team_name' and 'round' and sum the points for each team in each round
+        team_points_per_round = merged_drivers_selected_year.groupby(['team_name', 'round'])['points'].sum().reset_index()
+
+        # Create a line chart using Plotly Express
+        fig = px.line(team_points_per_round, x='round', y='points', color='team_name',
+                    title=f'Total Points Variation per Team per Round',
+                    labels={'points': 'Total Points', 'round': 'Round', 'team_name': 'Team Name'},
+                    color_discrete_map=team_colors) 
+        
+        fig.update_layout(width=1400)
+        # Display the chart in the Streamlit app
+        st.plotly_chart(fig)
+
+        
 
     else:
         #Row A
@@ -801,122 +818,25 @@ elif option_chosen == 'Constructor Statistics':
         col3.image(liveries, use_column_width=True)
 
 
-        #Displaying data of selected driver vs teammate
-        ######## Stage 1 - Qualifying Position Comparison ########
-        # Choose the appropriate driver color dictionary based on the selected year
-        if selected_year == 2022:
-            driver_colors = driver_colors_2022
-        elif selected_year == 2023:
-            driver_colors = driver_colors_2023
+        #Displaying in the constructors tab
+        #Row B
+        col1, col2, col3 = st.columns(3)
 
-        # Convert gp_date to datetime
-        selected_year_data['gp_date'] = pd.to_datetime(selected_year_data['gp_date'])
+        #Left: Main Driver
 
-        # Sort the DataFrame by gp_date
-        selected_year_data.sort_values(by='gp_date', inplace=True)
-
-        # Filter data for the selected driver and his teammate
-        team_name_selected_driver = selected_year_data.loc[
-            selected_year_data['driver_name'] == selected_driver, 'team_name'].iloc[0]
-
-        selected_driver_data = selected_year_data[selected_year_data['driver_name'] == selected_driver]
-        teammate_data = selected_year_data[(selected_year_data['team_name'] == team_name_selected_driver) & 
-                                            (selected_year_data['driver_name'] != selected_driver)]
-
-        # Concatenate data for selected driver and teammate
-        filtered_data = pd.concat([selected_driver_data, teammate_data])
-
-        # Create a new column for driver color
-        filtered_data['driver_color'] = filtered_data['driver_name'].map(driver_colors)
-
-        # Swap colors between selected driver and teammate
-        color_map = {selected_driver: driver_colors[teammate_data['driver_name'].iloc[0]],
-                    teammate_data['driver_name'].iloc[0]: driver_colors[selected_driver]}
-
-        # Plotting using Plotly Express
-        fig = px.line(filtered_data, x='round', y='grid', color='driver_name',
-                    markers=True, line_shape='linear', labels={'grid': 'Qualifying Position'},
-                    color_discrete_map=color_map)
-
-        # Manually set line dash for the selected driver and teammate
-        fig.update_traces(selector=dict(name=selected_driver), line=dict(dash='solid'))
-        fig.update_traces(selector=dict(name=teammate_data['driver_name'].iloc[0]), line=dict(dash='dot'))
-
-        # Stretch the plot to take the length of the whole main page
-        fig.update_layout(width=1400)
-
-        # Customize layout
-        fig.update_layout(title=f'Comparison of {selected_driver} and Teammate Qualifying Positions',
-                        xaxis_title='Race Week',
-                        yaxis_title='Qualifying Position',
-                        legend_title='Drivers')
-
-        # Invert the y-axis order
-        fig.update_yaxes(autorange="reversed")
-
-        # Display the plot in Streamlit
-        st.plotly_chart(fig)
-
-        #Note for the user
-        st.markdown(f"*Note: The Dashed Line represents {selected_driver}'s teammate - {teammate_data['driver_name'].iloc[0]}")
-
-        ######## Stage 2 - Race Position Comparison ###########
-        # Plotting using Plotly Express
-        fig = px.line(filtered_data, x='round', y='positionOrder', color='driver_name',
-                    markers=True, line_shape='linear', labels={'positionOrder': 'Finishing Position'},
-                    color_discrete_map=driver_colors)
-
-        # Swap colors between selected driver and teammate
-        color_map = {selected_driver: driver_colors[teammate_data['driver_name'].iloc[0]],
-                    teammate_data['driver_name'].iloc[0]: driver_colors[selected_driver]}
-
-        # Manually set line dash for the selected driver and teammate
-        fig.update_traces(selector=dict(name=selected_driver), line=dict(dash='solid'))
-        fig.update_traces(selector=dict(name=teammate_data['driver_name'].iloc[0]), line=dict(dash='dot'))
-
-        # Stretch the plot to take the length of the whole main page
-        fig.update_layout(width=1400)
-
-        # Customize layout
-        fig.update_layout(title=f'Comparison of {selected_driver} and Teammate Finishing Positions',
-                        xaxis_title='Race Date',
-                        yaxis_title='Finishing Position',
-                        legend_title='Driver Code')
-
-        # Invert the y-axis order
-        fig.update_yaxes(autorange="reversed")
-
-        # Display the plot in Streamlit
-        st.plotly_chart(fig)
-
-        #Note for the user
-        st.markdown(f"*Note: The Dashed Line represents {selected_driver}'s teammate - {teammate_data['driver_name'].iloc[0]}")
+        #Centre text
+        col2.subheader
+        #Right: Secondary Driver
 
 
-        col4, col5 = st.columns(2)
-
-        #Break lines
-        st.markdown("")
-        st.markdown("")
-
-        # Find the highest finish for the selected driver
-        highest_finish = selected_driver_data["positionOrder"].min()
-        ordinal_hf = ordinal(highest_finish)
-        race_with_highest_finish = selected_driver_data[selected_driver_data["positionOrder"] == highest_finish].iloc[0]
-
-        # Display the highest finish, gp_date, and gp_name using .metric method
-        col4.metric(f"{selected_driver}'s Highest Finish This Season", ordinal_hf)
-        col4.metric(f"Date:", race_with_highest_finish['gp_date'].strftime('%d-%m-%Y'))
-        col4.metric(f"Race:", race_with_highest_finish['gp_name'])
-
-        #Displaying the total points achieved
-        col5.metric(f"{selected_driver}'s Total Points This Season", selected_driver_data["points"].sum())
-        col5.metric("", "")
-        col5.metric(f"{selected_driver}'s Average Finishing Position This Season", ordinal(selected_driver_data["positionOrder"].mean()))
 
 
-    
-    st.sidebar.write(f"Driver selected: {selected_constructor}")# Add your constructor statistics content here
+        ######## Stage 1 - Points throughout the Championship Rounds ########
+
+        ######## Stage 2 - Average Quali Position per Round
+        
+
+        
 
 
 elif option_chosen == 'Grand Prix Information':
