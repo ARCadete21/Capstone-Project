@@ -39,6 +39,9 @@ link: https://chat.openai.com/share/99740f49-ca27-43cb-8917-b7957c04003b
 
 Summarizing Competitor's reviews into Pros and Cons List
 
-link: ?
+link: ----
+
+This prompt was not possible to create since we have no competition in the market. Instead and to compensate, in the prompt above we created 5 Twitter Pages because from our perspective
+it made sense to give F1 Fans a place that could offer live updates of the races and the news about the F1 World.
 
 ---------

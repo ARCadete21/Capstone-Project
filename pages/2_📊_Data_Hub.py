@@ -7,6 +7,7 @@ import re
 import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
+from plotly.subplots import make_subplots
 
 #Some useful created functions
 # Custom function to convert numeric position to ordinal position
@@ -225,6 +226,30 @@ constructor_liveries = {
     'Alfa Romeo': 'https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/2023/alfa-romeo.png.transform/6col/image.png'
 }
 
+track_maps = {
+    "Albert Park Grand Prix Circuit": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Australia_Circuit.jpg',
+    "Bahrain International Circuit": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Bahrain_Circuit.png.transform/9col/image.jpg',
+    "Jeddah Corniche Circuit": 'https://media.formula1.com/image/upload/f_auto/q_auto/v1677244985/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Saudi_Arabia_Circuit.png.transform/9col/image.jpg',
+    "Red Bull Ring": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Austria_Circuit.jpg',
+    "Baku City Circuit": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Baku_Circuit.jpg',
+    "Circuit de Barcelona-Catalunya": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Spain_Circuit.jpg',
+    "Circuit Gilles Villeneuve": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Canada_Circuit.png.transform/9col/image.jpg',
+    "Miami International Autodrome": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Miami_Circuit.png.transform/9col/image.jpg',
+    "Circuit de Spa-Francorchamps": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Belgium_Circuit.jpg',
+    "Hungaroring ": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Hungary_Circuit.jpg',
+    "Silverstone Circuit ": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Great_Britain_Circuit.jpg',
+    "Circuit de Monaco": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Monoco_Circuit.png.transform/9col/image.jpg',
+    "Autódromo José Carlos Pace": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Brazil_Circuit.png.transform/9col/image.jpg',
+    "Marina Bay Street Circuit ": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Singapore_Circuit.png.transform/9col/image.jpg',
+    "Autodromo Nazionale di Monza ": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Italy_Circuit.jpg',
+    "Yas Marina Circuit": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Abu_Dhabi_Circuit.jpg',
+    "Circuit of the Americas": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/USA_Circuit.jpg',
+    "Autodromo Enzo e Dino Ferrari": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/USA_Circuit.jpg',
+    "Autódromo Hermanos Rodríguez": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Mexico_Circuit.jpg',
+    "Circuit Paul Ricard": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/France_Circuit.jpg',
+    "Circuit Park Zandvoort": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Netherlands_Circuit.jpg',
+    "Suzuka Circuit": 'https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Japan_Circuit.png.transform/9col/image.jpg',
+    }
 
 ######## Setting the overall page configuration ########
 st.set_page_config(
@@ -648,13 +673,6 @@ elif option_chosen == 'Constructor Statistics':
     # Add a None option at the beginning of the list
     drivers_list = [None] + drivers_for_selected_year.tolist()
 
-    ####To Finish Off the Sidebar with Trademark
-    st.sidebar.markdown('''
-    ---
-    Website developed for the \n Capstone Project Course
-                    
-                        © AiTHLETES  
-    ''')
 
     # Add your driver statistics content here
     if selected_constructor is None:
@@ -815,37 +833,190 @@ elif option_chosen == 'Constructor Statistics':
         # Column 3
         liveries = constructor_liveries.get(selected_constructor)
         col3.markdown(f"{selected_constructor}'s Car Livery")
+        col3.markdown("")
+        col3.markdown("")
+        col3.markdown("")
         col3.image(liveries, use_column_width=True)
+
+        
 
 
         #Displaying in the constructors tab
+        
         #Row B
-        col1, col2, col3 = st.columns(3)
+        st.subheader(f"{selected_constructor}'s Driver Lineup:")
+        driver_photos_dict = driver_photos_2022 if selected_year == 2022 else driver_photos_2023
 
-        #Left: Main Driver
+        # Filter drivers based on selected constructor
+        selected_team_data = selected_year_data[selected_year_data['team_name'] == selected_constructor]
 
-        #Centre text
-        col2.subheader
-        #Right: Secondary Driver
+        # Display driver photos and information in three columns
+        col5, col6, col7 = st.columns(3)
 
+        driver1 = None
+        driver2 = None
+
+        # Loop through the selected_team_data to assign drivers to variables
+        for index, row in selected_team_data.iterrows():
+            driver_name = row['driver_name']
+            if driver_name in driver_photos_dict:
+                if driver1 is None:
+                    driver1 = (driver_name, driver_photos_dict[driver_name], row['number'])
+                else:
+                    driver2 = (driver_name, driver_photos_dict[driver_name], row['number'])
+                    break  # Exit the loop after finding two drivers
+
+        # Display drivers in specific columns
+        if driver1:
+            col5.image(driver1[1], caption=driver1[0], use_column_width=True)
+
+        if driver2:
+            col7.image(driver2[1], caption=driver2[0], use_column_width=True)
+
+        # Display driver information using st.metric in the middle column
+        if driver1:
+            col6.metric("Left Driver's Name", value=f"⬅️{driver1[0]}")
+            col6.metric(label=driver1[0], value=f"Driver Number: {driver1[2]}")
+
+        col6.markdown("")
+
+        if driver2:
+            col6.metric("Right Driver's Name", value=f"{driver2[0]}➡️")
+            col6.metric(label=driver1[0], value=f"Driver Number: {driver2[2]}")
 
 
 
         ######## Stage 1 - Points throughout the Championship Rounds ########
 
+        #Point variation per team per week
+        # Filter data for the selected team
+        selected_team_data = selected_year_data[selected_year_data['team_name'] == selected_constructor]
+
+        # Get the color for the selected team from the team_colors dictionary
+        selected_team_color = team_colors.get(selected_constructor, 'default_color')
+
+        # Group by 'round' and sum the points for the selected team in each round
+        team_total_points_per_round = selected_team_data.groupby('round')['points'].sum().reset_index()
+
+        # Create a line chart using Plotly Express
+        fig = px.line(team_total_points_per_round, x='round', y='points',
+                    title=f'Total Points Variation for {selected_constructor} per Round',
+                    labels={'points': 'Total Points', 'round': 'Round'},
+                    line_shape="linear", line_dash_sequence=['solid'], color_discrete_sequence=[selected_team_color])
+
+        fig.update_layout(width=1400)
+
+        # Display the chart in the Streamlit app
+        st.plotly_chart(fig)
+
+
+
         ######## Stage 2 - Average Quali Position per Round
         
+        # Get the color for the selected team from the team_colors dictionary
+        selected_team_color = team_colors.get(selected_constructor, 'default_color')
+
+        # Group by 'round' and sum the points for the selected team in each round
+        team_total_points_per_round = selected_team_data.groupby('round')['grid'].mean().reset_index()
+
+        # Create a line chart using Plotly Express
+        fig = px.line(team_total_points_per_round, x='round', y='grid',
+                    title=f'Average Qualifying Position Variation for {selected_constructor} per Round',
+                    labels={'grid': 'Grid Position', 'round': 'Round'},
+                    line_shape="linear", line_dash_sequence=['solid'], color_discrete_sequence=[selected_team_color])
+
+        fig.update_layout(width=1400)
+
+        # Invert the y-axis order
+        fig.update_yaxes(autorange="reversed")
+        # Display the chart in the Streamlit app
+        st.plotly_chart(fig)
+
 
         
 
 
 elif option_chosen == 'Grand Prix Information':
-    st.sidebar.write("Grand Prix information content goes here")
-    # Add your Grand Prix information content here
+    selected_gp = st.selectbox("Select the Grand Prix you want to view:", [None] + merged_drivers['gp_name'].sort_values().unique().tolist(), 
+                                   index=0, key="gp_selectbox")
+    
+    # Use loc to select columns related to the selected Grand Prix
+    selected_gp_info = merged_drivers.loc[merged_drivers['gp_name'] == selected_gp,
+                                        ['gp_name', 'gp_date', 'track_name', 'location_y', 'country_y', 'time']]
+    
+    selected_gp_info = selected_gp_info.groupby(['gp_name', 'gp_date']).agg({
+        'track_name': 'first',
+        'location_y': 'first',
+        'country_y': 'first',
+        'time': 'first',
+    }).reset_index()
+
+
+    #initializing columns
+    col1, col2 = st.columns(2)
+ 
+    
+    #Gp date
+    gp_date = selected_gp_info.loc[selected_gp_info['gp_name'] == selected_gp, 'gp_date'].iloc[0]
+
+    # Assuming gp_date is a Pandas Timestamp object
+    gp_date_str = gp_date.strftime('%d-%m-%Y')  # Convert Timestamp to string
+
+    # Display the date using metric
+    col1.metric(f"{selected_gp}'s Date", gp_date_str)
+
+
+    #Gp Time
+    gp_hours = selected_gp_info.loc[selected_gp_info['gp_name'] == selected_gp, 'time'].iloc[0]
+    # Assuming gp_date is a Pandas Timestamp object
+
+    # Display the date using metric
+    col1.metric(f"{selected_gp}'s Start Time (GMT)", gp_hours)
+
+    #Track Information
+    track_name_metric = selected_gp_info['track_name'].iloc[0]
+    # Display the track name using metric
+    col2.metric("Venue Name:", track_name_metric)
+
+    #Location Information
+    track_cnt_metric = selected_gp_info['country_y'].iloc[0]
+    # Display the track name using metric
+    col2.metric("Country", track_cnt_metric)
+    #Track Information
+    track_loc_metric = selected_gp_info['location_y'].iloc[0]
+    # Display the track name using metric
+    col2.metric("City", track_loc_metric)
+
+
+    # Display selected Grand Prix information
+    if not selected_gp_info.empty:
+
+        # Display track map image if available
+        selected_track = selected_gp_info['track_name'].iloc[0]
+        track_map_path = track_maps.get(selected_track)
+
+        if track_map_path:
+            st.subheader(f"{selected_gp}")
+            st.markdown(f"{selected_track}'s track map")
+            st.image(track_map_path, use_column_width=True)
+        else:
+            st.warning(f"No track map available for {selected_track}")
+    else:
+        st.warning("Please select a Grand Prix from the dropdown.")
+
+
+
+
+
 
 elif option_chosen is None:
     st.sidebar.write("Select an option to display relevant content")
+    st.header("Data Hub")
     st.subheader("Use the sidebar selectbox to your left to select what data you want to see!")
+    st.markdown("")
+    st.markdown("")
+    st.markdown("")
+
     st.image("https://d3cm515ijfiu6w.cloudfront.net/wp-content/uploads/2022/07/01142406/Lewis-Hamilton-pointing-finger-at-crowd-planetF1.jpg")
 
 
