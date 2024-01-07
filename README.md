@@ -18,15 +18,15 @@
 <a name="proj_desc"></a>
 ## Project Description
 
-Our project comes in the sense of a university course - Capstone Project - in our final year of a Bachelor's Degree in Data Science at Nova IMS.
+This project comes for the completion of a university course - Capstone Project - in the third year of a Bachelor's Degree in Data Science at Nova IMS.
 
-Our company, AiTHLETES,  is designed to get data insights from the F1 world. The major objective of our company is to help F1 fans all over the globe to get to know better the main personalities in the grid and everything that revolves around them.  
+Our company, AiTHLETES,  was designed to get data insights from the F1 world. The major objective of our company is to help F1 fans all over the globe get a complete perspective on all aspects of Formula 1.  
 
-Our project aims to develop an interface specialized in the F1 history - F1 Pilot - and as well as being able to predict the drivers' standings with each grand prix data and as well as help any user with their F1 fantasy, able to adapt to any restrictions existing in the fantasy rules.
+The project aims to develop an interface specialized in F1 history - the F1 Pilot - as well as being able to predict the drivers' standings with each grand prix data. Also, it is supposed to help any user with their F1 Fantasy Team being able to adapt to any restrictions existing in the fantasy rules and help users build their ideal team.
 
-In addition, a website was also developed, where our F1 Pilot is inserted, users can find several pages where they can interact with everyone and even with the developers of this project; a Data Hub where up-to-date data is powerfully displayed; a comment section where everyone can give suggestions via email to the marketing department.
+In addition, a website was also developed, where our F1 Pilot was inserted. There, users can find several pages where they can interact with everyone and even with the developers of this project via the site's F1 Blog; a Data Hub where up-to-date data is powerfully displayed and in a user-friendly manner; and a comment section where everyone can give suggestions via email to the marketing department.
 
-This way, in the growing fanbase of the sport we are looking to spread more knowledge about everything that is going on weekly in the track! With the power of artificial intelligence, we can be side by side with any question our users might have every single day.
+This way, as the fanbase of the sport keeps on growing, we are looking to spread more accessible data insights about everything that is going on weekly on the track! With the power of artificial intelligence, we can be side by side with any question our users might have daily.
 
 
 <a name="main_tech"></a>
