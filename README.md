@@ -39,8 +39,9 @@ With this project, we were able to explore more in-depth how to make use of LLM 
 ### - What were the main challenges faced? 
 The main challenges faced during the development of this project were related with:
 - Team's limited budget in OpenAi - using and interacting with the chat. Hence, there was a need to become more cautious and restrict some of the parts of the development stage;
+- As the majority of Formula 1 data is based on tables or comma-separated values files (.csv), it was not always possible for the ChatBot to get new information from those types of files. We were required to change our approach and create new PDFs filled with the previously tabled data;
 - The chatbot required very specific instructions to ensure the correct outputs were obtained, which was an extremely time-consuming process (sort of trial and error);
-- There was not enough time to predict, and consequently, code all the possible human-generated inputs. However, that is something that can be improved with time and user's help/reviews.
+- The data provided to feed the bot as big as it was, needs to go through a lot of embedding steps to get a smaller dimensionality which consumed a lot of the precious and small time existing to train the chatbot;
 
 <a name="rep_desc"></a>
 ##
@@ -98,15 +99,3 @@ Afterwards, you can have fun interacting with our Dr. Chatbot.
 ## License
 This project is licensed under the [GNU AGPLv3] - see the [LICENSE.md](LICENSE.md) file for details.
 ##
-
-<a name="ref"></a>
-## References
-Here are some of the most important contents our team checked during the development of the project:
-- OpenAI. (2023). ChatGPT (Jan 7 version) [Large language model](https://chat.openai.com/chat)
-- [Streamlit App Design - 1](https://github.com/Ashwani132003/pondering)
-- [Streamlit App Design - 2](https://github.com/hamagistral/de-zoomcamp-ui/blob/master/streamlit/01_%F0%9F%91%A8%E2%80%8D%F0%9F%94%A7_DE_Zoomcamp_2023.py)
-- [Streamlit Components](https://streamlit.io/components?category=widgets)
-- [Additional Streamlit Components](https://docs.streamlit.io/library/api-reference/widgets/st.multiselect)
-- [How to deploy the application](https://docs.streamlit.io/streamlit-community-cloud/deploy-your-app)
-- [Schedule Chatbot Option](https://www.pragnakalp.com/how-to-use-openai-function-calling-to-create-appointment-booking-chatbot/)
-- [Chatbot Langchain Memory](https://stackoverflow.com/questions/76240871/how-do-i-add-memory-to-retrievalqa-from-chain-type-or-how-do-i-add-a-custom-pr)
