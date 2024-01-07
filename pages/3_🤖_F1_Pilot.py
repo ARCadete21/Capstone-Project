@@ -25,9 +25,9 @@ import random
 import time
 import streamlit as st
 
-from py_files.chat_bot import F1ChatBot
-from py_files.util import local_settings
-from py_files.prompt_list import prompts
+from chat_bot import F1ChatBot
+from util import *
+from prompt_list import prompts
 
 # [i]                                                                                            #
 # [i] Initialize FrontEnd App                                                                    #
