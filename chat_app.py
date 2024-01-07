@@ -29,7 +29,7 @@ def initialize() -> None:
             value=prompts[0]["prompt"]
         )
 
-    st.sidebar.title("🤖 🍕")
+    st.sidebar.title("🤖 F1 ChatBot")
 
     if "chatbot" not in st.session_state:
         st.session_state.chatbot = F1ChatBot(st.session_state.system_behavior)
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     with st.sidebar:
         with st.expander("Information"):
             if local_settings.OPENAI_API_KEY:
-                st.write(f"🔑 Key loaded: { local_settings.OPENAI_API_KEY[0:6]}...")
+                st.write(f"🔑 Key loaded...")
 
             st.text("💬 MEMORY")
             st.write(st.session_state.chatbot.memory)
