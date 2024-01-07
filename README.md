@@ -31,17 +31,17 @@ This way, as the fanbase of the sport keeps on growing, we are looking to spread
 
 <a name="main_tech"></a>
 ### - What main technologies were used in the development of this project?
-For this project, the main goal was to create an AI-powered Conversational System that would engage with potential F1 fans. This would be the primary communication channel of our business - being able to assist our users (getting to know more facts about historical data, landing some insights about the last race, as well as their fantasy team changing possibilities; and mostly, help them to have a better understanding of future possible race winners with the predictive model implemented) through a conversational app. 
+For this project, the main goal was to create an AI-powered Conversational System that would engage with any type of potential Formula One fans. This would be the primary communication channel of our business - being able to assist our users in getting to know more facts about historical data, landing some insights about the last race, as well as their fantasy team changing possibilities; and mostly, to help them to have a better possibility of guessing the future race winners with the predictive model implemented that was implemented. All this by using the conversational app - the F1 Pilot. 
 
-With this project, we were able to explore more in-depth how to make use of LLM models, from OpenAI, in different problems (with Python being the chosen programming language) - through the development of a chatbot that can perform smooth facts and doubts conversations, predict which drivers are more likely to win the following races as well as who might be the best fit for their fantasy team. Furthermore, the team learned how to create an application using Streamlit.
+With this project, we were able to explore more in-depth how to make use of LLM models, from OpenAI, in different problems (with Python being the chosen programming language) - through the development of a chatbot capable of handling (and reproducing) a smooth conversation about facts and possible doubts that the Pilot's users may have. Furthermore, it was also the objective for the AI to be able to predict which drivers are more likely to win the following races as well as who might be the best fit for their fantasy team, by making use of a Forecasting model that was developed for the utilized time-series data. Furthermore, by making use of the Streamlit package, the group developed a full Web Application with several tabs, filling them with easy-to-understand knowledge making the information available accessible to the most casual fan or even to a new follower of the World's Most Entertaining Motorsport.
 
 <a name="main_chal"></a>
 ### - What were the main challenges faced? 
 The main challenges faced during the development of this project were related with:
-- Team's limited budget in OpenAi - using and interacting with the chat. Hence, there was a need to become more cautious and restrict some of the parts of the development stage;
+- The Team's limited budget in OpenAi made it very hard to use and interact with the chat. Hence, there was a need to become more cautious and restrict some of the parts of the development stage;
+- The team's original idea of data to provide to the AI, turned out to be impossible to achieve. There were tons of files, some of them with thousands of rows, which made the code prompt errors on several occasions stating that the tokens could not be embedded;
 - As the majority of Formula 1 data is based on tables or comma-separated values files (.csv), it was not always possible for the ChatBot to get new information from those types of files. We were required to change our approach and create new PDFs filled with the previously tabled data;
 - The chatbot required very specific instructions to ensure the correct outputs were obtained, which was an extremely time-consuming process (sort of trial and error);
-- The data provided to feed the bot as big as it was, needs to go through a lot of embedding steps to get a smaller dimensionality which consumed a lot of the precious and small time existing to train the chatbot;
 
 <a name="rep_desc"></a>
 ##
