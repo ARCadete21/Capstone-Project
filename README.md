@@ -71,18 +71,9 @@ Our project was divided into two main parts: informative website on WIX (https:/
 
 Finally, to run the Streamlit app: go inside the terminal, and open the [`Website`](Website) folder  (which is inside the capstone folder/repository). When that is done, run the following command `streamlit run main.py`.
 
-<a name="chat_int"></a>
-### How to interact with our chatbot
-Our chatbot is capable of handling different formats of inputs. However, in order to obtain the most correct result the following structure of inputs shall be followed (the format presented will be "question that the chatbot will ask" | "your answer format"):
-- Date | YYYY-MM-DD (e.g.: 2024-01-07)
-- Time | HH:MM:SS (e.g.: 10:30:00)
-- Email | Needs to be in email format, but other than that it does not have restrictions (e.g.: doc.it.right.cp@gmail.com)
-- Doctor | The name needs to be correctly written - the names of the available doctors can be seen in the schedule tab of our chatbot application (e.g.: Dr. José Dias).
-- Parking Spot | `Yes` or `No` answers only
-- Special Requests | Either `No` or state any special request that you desire (e.g.: "I want a wheelchair")
-- Payment in Advance | Integer Number between 0 and 100
 
-The results of the predictive model for each appointment can be verified in the event scheduled in the clinic's calendar. Furthermore, they are also stored at Doc-IT-Right's database (along with the patient's personal information and the remaining appointment data).
+
+
 
 Afterwards, you can have fun interacting on our website alongside our F1 Pilot.
 
