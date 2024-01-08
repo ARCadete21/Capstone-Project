@@ -43,37 +43,6 @@ The main challenges faced during the development of this project were related wi
 - As the majority of Formula 1 data is based on tables or comma-separated values files (.csv), it was not always possible for the ChatBot to get new information from those types of files. We were required to change our approach and create new PDFs filled with the previously tabled data;
 - The chatbot required very specific instructions to ensure the correct outputs were obtained, which was an extremely time-consuming process (sort of trial and error);
 
-<a name="rep_desc"></a>
-##
-## Repository Description
-This repository contains all the files created during the development of our project. In the following paragraphs will be a short description of how the repository is organized and what each file contains:
-- [Prompts folder](Prompts): contains all the links that lead to the chats where the prompts were fed into the LLM (in our case, ChatGPT) to obtain - company definition (company name, problem, value proposition, core values, mission, vision, tag line, personas), marketing (discussion of pros and cons of reviews from competitor companies, blog posts creation, pitch script, 5-post social media campaign, Instagram post captions), timetable scheduling and patient data generator prompts.
-- [No Show Prediction](No_show_prediction): this is a folder that contains two Jupyter notebooks, one containing the development of a predictive model for no-show appointments and another where the data needed for this task are properly treated.
-- [Website](Website): this folder contains all the needed files for the chatbot application, on Streamlit, to work properly.
-- [Prompt Template](Website/info_files/prompt_list.py):  this file contains the template prompts fed into the model (it is stored inside of info_files in the Website folder). 
-- [Requirements](requirements.txt): file that specifies the dependencies and the versions that need to be installed in the environment for the project to be run.
-- [Use Cases](use_cases.pdf): this file contains practical examples of scenarios in which our chatbot application can be helpful to clients of our company - appointment scheduling, appointment rescheduling, appointment cancellations, clarifying medical doubts, and predictive model.
-- [Five Questions](five_questions.md): this file contains practical examples of questions that can be asked to our chatbot, in which it requires it to go retrieve the information to our text data (pdf file with the medicine information leaflets).
-- [Data Description](data_description.txt): this text file contains the description and the metadata of all the used data in our project.
-- [Git Ignore](.gitignore): this file specifies patterns of files and directories that should be excluded from the version control of our repository.
-- [README](README.md): file that contains the basic instructions of how to run the project, the motivations behind it and its features.
-- [LICENSE](LICENSE.md): this is a file that contains the chosen license for this project.
-
-##
-<a name="proj_use"></a>
-## How To Use the Project. How to Install and Run the Project
-Our project was divided into two main parts: informative website on WIX (https://docitrightcp.wixsite.com/doc-it-right) and the Streamlit app. Hence, the following steps need to be taken to ensure that the chatbot interface can be correctly accessed:
-- Retrieve code from this GitHub Repository (`Fork` and then `Git Clone`)
-- Download the folder (data.zip), sent by email, with the credentials (credentials to be able to use the Google Calendar platform) and tokens (contains authorization tokens used to authenticate and authorize access when declaring the specified scope). Please unzip this folder before moving on to the next step.
-- Download the .env file (should be stored inside of the Capstone folder only), sent by email (which also contains our `API-key` - it is advisable to change to your own OpenAI API-key; the `DATA_PATH` should also be substituted to the local path of the data folder you just downloaded from the email. Please note that the end of the path should be `//`).
-- Afterwards, inside the `No-show prediction` folder - in this GitHub repository, there is a need to change in both notebooks the path for your local path to the data (Please note that the end of the path should be `//`).
-- There's also a need to run the requirements.txt file so that the environment is in the same conditions as the development environment was.
-
-Finally, to run the Streamlit app: go inside the terminal, and open the [`Website`](Website) folder  (which is inside the capstone folder/repository). When that is done, run the following command `streamlit run main.py`.
-
-
-
-
 
 Afterwards, you can have fun interacting on our website alongside our F1 Pilot.
 
