@@ -44,8 +44,6 @@ The main challenges faced during the development of this project were related wi
 - The chatbot required very specific instructions to ensure the correct outputs were obtained, which was an extremely time-consuming process (sort of trial and error);
 
 
-Afterwards, you can have fun interacting on our website alongside our F1 Pilot.
-
 <a name="credits"></a>
 ## 
 #### Project Developed by:
