@@ -7,9 +7,9 @@
 1. [Project Description](#proj_desc)
   1.1 [Main Technologies Used](#main_tech)
   1.2 [Main Challenges Faced](#main_chal)
-2. [Repository Description](#rep_desc)
+2. [Repository Description](#descript)
 3. [How to Use](#proj_use)
-   3.1. [How to Interact with our Chatbot](#chat_int)
+   3.1. [How to Interact with our Chatbot](#how_to)
 4. [Credits](#credits)
 5. [License](#license)
 6. [References](#ref)
@@ -51,7 +51,7 @@ The main challenges faced during the development of this project were related wi
 
 
 
-<a name="credits"></a>
+<a name="proj_use"></a>
 ##
 #### How To Use the Project. How to Install and Run the Project
 Our project was created solely with the use of the streamlit package (excluding the required packages for a user to be able to run the code that shows throughout the various pages). So, in order for someone to open our streamlit web application, the following
