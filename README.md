@@ -44,6 +44,28 @@ The main challenges faced during the development of this project were related wi
 - The chatbot required very specific instructions to ensure the correct outputs were obtained, which was an extremely time-consuming process (sort of trial and error);
 
 
+<a name="descript"></a>
+##
+#### Repository Description
+
+
+
+
+<a name="credits"></a>
+##
+#### How To Use the Project. How to Install and Run the Project
+Our project was created solely with the use of the streamlit package (excluding the required packages for a user to be able to run the code that shows throughout the various pages). So, in order for someone to open our streamlit web application, the following
+
+
+
+
+<a name="how_to"></a>
+## 
+#### How to Interact with the F1 Pilot:
+
+
+
+
 <a name="credits"></a>
 ## 
 #### Project Developed by:
