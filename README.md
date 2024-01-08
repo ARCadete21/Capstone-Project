@@ -40,7 +40,7 @@ With this project, we were able to explore more in-depth how to make use of LLM 
 The main challenges faced during the development of this project were related with:
 - The Team's limited budget in OpenAi made it very hard to use and interact with the chat. Hence, there was a need to become more cautious and restrict some of the parts of the development stage;
 - The team's original idea of data to provide to the AI, turned out to be impossible to achieve. There were tons of files, some of them with thousands of rows, which made the code prompt errors on several occasions stating that the tokens could not be embedded;
-- As the majority of Formula 1 data is based on tables or comma-separated values files (.csv), it was not always possible for the ChatBot to get new information from those types of files. We were required to change our approach and create new PDFs filled with the previously tabled data;
+- As the majority of Formula 1 data is based on tables or comma-separated values files (.csv), it was not always possible for the ChatBot to get new information from those types of files. We were required to change our approach and create new PDFs filled with the previously tabled data. Even then, this approach did not yield great results and was disregarded;
 - The chatbot required very specific instructions to ensure the correct outputs were obtained, which was an extremely time-consuming process (sort of trial and error);
 
 
